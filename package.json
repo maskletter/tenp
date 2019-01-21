@@ -4,10 +4,35 @@
   "description": "<br>\r <p align=\"center\">\r    <img src='https://maskletter.github.io/tenp-document/dist/assets/img/tenp.6d5e6693.svg' width='400' />\r </p>",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --exit -r ./core/test/env  -r ./node_modules/ts-node/register  -r ./node_modules/tsconfig-paths/register ./core/test/*.ts",
-    "test2": "istanbul cover node_modules/mocha/bin/_mocha --exit -r ./core/test/env  -r ./node_modules/ts-node/register  -r ./node_modules/tsconfig-paths/register ./core/test/*.ts",
-    "test3": "mocha --exit -r ./core/test/env  ./core/test/test.js",
-    "test4": "istanbul cover node_modules/mocha/bin/_mocha --exit -r ./core/test/env  ./core/test/test.js"
+    "test-ts": "mocha --exit -r ./core/test/env  -r ./node_modules/ts-node/register  -r ./node_modules/tsconfig-paths/register ./core/test/*.ts",
+    "test": "nyc node_modules/mocha/bin/_mocha --exit ./core/test/*.ts",
+    "tsc": "tsc ./core/test/test.ts --experimentalDecorators -lib ES2015",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
+  },
+  "nyc": {
+    "include": [
+      "core/test/**/*.ts",
+      "core/test/**/*.tsx"
+    ],
+    "exclude": [
+      "**/*.d.ts"
+    ],
+    "extension": [
+      ".ts",
+      ".tsx"
+    ],
+    "require": [
+      "./core/test/env",
+      "ts-node/register",
+      "./node_modules/tsconfig-paths/register"
+    ],
+    "reporter": [
+      "text",
+      "html"
+    ],
+    "sourceMap": true,
+    "instrument": true,
+    "all": true
   },
   "repository": {
     "type": "git",
@@ -25,11 +50,11 @@
     "@types/node": "^10.12.18",
     "chai": "^4.2.0",
     "coveralls": "^3.0.2",
+    "istanbul": "^0.4.5",
     "mocha": "^5.2.0",
+    "nyc": "^13.1.0",
     "ts-node": "^7.0.1",
-    "tsconfig-paths": "^3.7.0",
-    "istanbul": "^0.4.5"
-
+    "tsconfig-paths": "^3.7.0"
   },
   "keywords": [
     "node",

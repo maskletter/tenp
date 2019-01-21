@@ -7,6 +7,7 @@ import * as express from 'express'
 import * as http from 'http'
 import * as assert from 'assert';
 
+
 process.stdout.write(process.platform === 'win32' ? '\x1Bc' : '\x1B[2J\x1B[3J\x1B[H')
 
 const interceptor = (req: tenp.Request, res: tenp.Response): void => {

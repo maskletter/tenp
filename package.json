@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha --exit -r ./core/test/env  -r ./node_modules/ts-node/register  -r ./node_modules/tsconfig-paths/register ./core/test/*.ts",
-    "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls",
-    "cover": "istanbul cover _mocha"
+    "cover": "istanbul cover _mocha",
+    "coveralls": "mocha --exit -r ./core/test/env  -r ./node_modules/ts-node/register  -r ./node_modules/tsconfig-paths/register ./core/test/*.ts -R mocha-lcov-reporter -r jscoverage | coveralls"
   },
   "repository": {
     "type": "git",

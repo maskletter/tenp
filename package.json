@@ -4,9 +4,7 @@
   "description": "<br>\r <p align=\"center\">\r    <img src='https://maskletter.github.io/tenp-document/dist/assets/img/tenp.6d5e6693.svg' width='400' />\r </p>",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --exit -r ./core/test/env  -r ./node_modules/ts-node/register  -r ./node_modules/tsconfig-paths/register ./core/test/*.ts",
-    "cover": "istanbul cover _mocha",
-    "coveralls": "mocha --exit -r ./core/test/env  -r ./node_modules/ts-node/register  -r ./node_modules/tsconfig-paths/register ./core/test/*.ts -R mocha-lcov-reporter -r jscoverage | coveralls"
+    "test": "mocha --exit -r ./core/test/env  -r ./node_modules/ts-node/register  -r ./node_modules/tsconfig-paths/register ./core/test/*.ts"
   },
   "repository": {
     "type": "git",

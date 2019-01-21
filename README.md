@@ -16,6 +16,12 @@
 <a href="https://img.shields.io/badge/node-%3E%3D6-brightgreen.svg" title="Node Limitation" rel="nofollow">
    <img src="https://img.shields.io/badge/node-%3E%3D6-brightgreen.svg" alt="npm version" height="18">
 </a>
+<a href="https://coveralls.io" title="Node Limitation" rel="nofollow">
+   <img src="https://coveralls.io/repos/github/maskletter/tenp/badge.svg?branch=master" height="18">
+</a>
+<a href="https://travis-ci.org" title="Node Limitation" rel="nofollow">
+   <img src="https://travis-ci.org/maskletter/tenp.svg?branch=master" height="18">
+</a>
 
 👉👉👉[演示项目链接](https://github.com/maskletter/kvl-demo)
 <br>

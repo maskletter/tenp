@@ -4,7 +4,7 @@
   "description": "<br>\r <p align=\"center\">\r    <img src='https://maskletter.github.io/tenp-document/dist/assets/img/tenp.6d5e6693.svg' width='400' />\r </p>",
   "main": "index.js",
   "scripts": {
-    "test": "mocha -r ./core/test/env  -r ./node_modules/ts-node/register  -r ./node_modules/tsconfig-paths/register ./core/test/*.ts"
+    "test": "mocha --exit -r ./core/test/env  -r ./node_modules/ts-node/register  -r ./node_modules/tsconfig-paths/register ./core/test/*.ts"
   },
   "repository": {
     "type": "git",

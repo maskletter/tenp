@@ -1,0 +1,126 @@
+#!/usr/bin/env node
+
+'use strict';
+
+var pack = require('../package.json');
+const { execSync } = require('child_process')
+const argv = process.argv.slice(2, process.argv.length);
+const readline = require('readline');
+const path = require('path');
+const installDependencies = require('../lib/install.js')
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+function run(){
+  try {
+
+    switch (argv[0]) {
+      case 'dev':
+        require('../lib/dev.js')
+        break;
+      case 'api':
+        console.log('尚未完成，不要急~~')
+        // require('../lib/api.js')
+        break;
+      case 'serve':
+        require('../lib/pm2.js').start(argv.slice(1, argv.length));
+        break;
+      case 'ls':
+      case 'list':
+        require('../lib/pm2.js').list(argv[1]);
+        break;
+      case 'stop':
+        require('../lib/pm2.js').stop(argv[1]);
+        break;
+      case 'kill':
+        require('../lib/pm2.js').kill();
+        break;
+      case 'disconnect':
+        require('../lib/pm2.js').disconnect();
+        break;
+      case 'show':
+        require('../lib/pm2.js').describe(argv[1]);
+        break;
+      case 'logs':
+        require('../lib/pm2.js').log(argv.slice(1, argv.length));
+        break;
+      case 'reload':
+        require('../lib/pm2.js').reload(argv[1]);
+        break;
+      case 'init':
+        require('../lib/init.js')(argv.slice(1, argv.length))
+        break;
+      case 'email':
+        execSync('start mailto:maskletter@outlook.com')
+        process.exit()
+        //mailto:zhangsl@sina.com
+        break;;
+      case 'v':
+      case 'i':
+      case 'V':
+      case 'version':
+        console.log('\r\n $ version:  '+pack.version)
+        process.exit()
+        break;
+      default:
+        console.log([
+          '',
+          'options:',
+          '',
+          '  init [name]        创建项目',
+          '',
+          '  serve              生产模式启动服务',
+          '    --build          打包并启动服务',
+          '    -i [2]           启动集群模式,[cpu数量，默认全部cpu数量]',
+          '    --mode [name]    自定义环境变量,默认build',
+          '    --url            生成api路径json',
+          '',
+          '  dev                调试模式启动服务',
+          '    --build          打包完立刻结束服务',
+          '    --mode [name]    自定义环境变量,默认dev',
+          '    --url            生成api路径json',
+          '',
+          '  api                生成接口api文档(未完成)',
+          '',
+          '  ----------------------------------------------',
+          '',
+          '  list [id|name]     查看启动的服务',
+          '  ls [id|name]       查看启动的服务',
+          '',
+          '  kill [id|name]     杀死启动的服务',
+          '',
+          '  stop [id|name]     停止启动的服务',
+          '',
+          '  disconnect         断开与pm2守护进程的连接',
+          '',
+          '  show [id|name]     查看启动服务的具体信息',
+          '',
+          '  logs [id|name]     查看启动服务日志',
+          '',
+          '  reload [id|name]   重新启动服务',
+          '',
+          '  ----------------------------------------------',
+          '',
+          '  email              通过邮箱反馈',
+          '',
+          '  ----------------------------------------------',
+          '',
+          '  -h / help          帮助列表'
+        ].join('\n'));
+        process.exit()
+        break;
+    }
+
+  } catch(e) {
+    
+    console.log(e)
+   
+  }
+
+}
+
+  
+
+run();

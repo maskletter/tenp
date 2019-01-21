@@ -1,0 +1,43 @@
+{
+  "name": "@tenp/core",
+  "version": "0.0.2",
+  "description": "基于express/typescript的node框架",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maskletter/tenp.git"
+  },
+  "dependencies": {
+    "express": "^4.16.4",
+    "formidable": "^1.2.1",
+    "typescript": "^3.2.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.16.0",
+    "@types/node": "^10.12.18"
+  },
+  "keywords": [
+    "node",
+    "typescript",
+    "express",
+    "pm2",
+    "router"
+  ],
+  "files": [
+    "lib",
+    "test"
+  ],
+  "author": "maskletter",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/maskletter/tenp/issues"
+  },
+  "types": "lib/index.d.ts",
+  "homepage": "https://github.com/maskletter/tenp#readme"
+}

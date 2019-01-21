@@ -1,0 +1,40 @@
+{
+  "name": "tenp",
+  "version": "1.0.0",
+  "description": "<br>\r <p align=\"center\">\r    <img src='https://maskletter.github.io/tenp-document/dist/assets/img/tenp.6d5e6693.svg' width='400' />\r </p>",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha -r ./core/test/env  -r ./node_modules/ts-node/register  -r ./node_modules/tsconfig-paths/register ./core/test/*.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maskletter/tenp.git"
+  },
+  "dependencies": {
+    "express": "^4.16.4",
+    "formidable": "^1.2.1",
+    "typescript": "^3.2.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.16.0",
+    "@types/mocha": "^5.2.5",
+    "@types/node": "^10.12.18",
+    "@types/chai": "^4.1.7",
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
+    "ts-node": "^7.0.1",
+    "tsconfig-paths": "^3.7.0"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "typescript",
+    "pm2"
+  ],
+  "author": "maskletter",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/maskletter/tenp/issues"
+  },
+  "homepage": "https://github.com/maskletter/tenp#readme"
+}

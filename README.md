@@ -21,6 +21,9 @@
 <a href="https://travis-ci.org/maskletter/tenp" title="Node Limitation" rel="nofollow">
    <img src="https://travis-ci.org/maskletter/tenp.svg?branch=master" height="18">
 </a>
+<a href="https://codeclimate.com/github/maskletter/tenp/maintainability">
+   <img src="https://api.codeclimate.com/v1/badges/53669772f0a4dac97bd7/maintainability" />
+</a>
 
 👉👉👉[演示项目链接](https://github.com/maskletter/tenp-demo)
 <br>

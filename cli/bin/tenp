@@ -53,9 +53,12 @@ function run(){
         require('../lib/init.js')(argv.slice(1, argv.length))
         break;
       case 'email':
-        execSync('start mailto:maskletter@outlook.com')
+        if(require('is-windows')()){
+          execSync('start mailto:maskletter@outlook.com')
+        }else{
+          execSync('open mailto:maskletter@outlook.com')
+        }
         process.exit()
-        //mailto:zhangsl@sina.com
         break;;
       case 'v':
       case 'i':

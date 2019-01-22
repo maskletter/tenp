@@ -1,6 +1,7 @@
 
-import Tenp from 'tenp';
-import { Main, Router, config } from 'tenp';
+import Tenp from '@tenp/core';
+import { Main, Router, config } from '@tenp/core';
+
 
  
 @Router({

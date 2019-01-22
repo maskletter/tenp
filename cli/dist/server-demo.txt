@@ -1,0 +1,8 @@
+
+
+namespace TenpTest{
+	const name: string = 'hello,tenp';
+
+	console.log(name)
+}
+	

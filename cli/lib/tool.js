@@ -5,10 +5,12 @@ const path = require('path');
 const DefaultTenpConfig = {
 	env: {
 		dev: {
-			kvl_name: 'dev'
+			kvl_status: 'dev',
+			kvl_version: require('../package.json').version
 		},
 		build: {
-			kvl_name: 'build'
+			kvl_status: 'build',
+			kvl_version: require('../package.json').version
 		}
 	},
 	pm2: {

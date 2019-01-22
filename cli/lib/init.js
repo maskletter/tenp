@@ -87,7 +87,7 @@ function installPack(){
 }
 
 function createAssets(isNo){
-	const filename = isNo ? 'server-demo.ts' : 'server.ts';
+	const filename = isNo ? 'server-demo.txt' : 'server.txt';
 	const content = fs.readFileSync(path.resolve(__dirname,'../dist/'+filename));
 	const src = path.join(directoryPath, 'src');
 	const exists = fs.existsSync(src);
@@ -128,9 +128,7 @@ module.exports = function(argv){
 	if(!isNo){
 		consoleVersion();
 	}
-	// console.log(argv, isNo)
-	// process.exit();
-	// return;
+
 	createPackage(name).then(({ pacakge, isCreate }) => {
 		if(!isCreate || isCreate == 'yes' || isCreate == 'y'){
 			fs.mkdirSync(directoryPath);

@@ -22,7 +22,7 @@ let SandboxMap = {};
 //验证器type
 
 
-//运行框架启动完成时间
+//运行框架启动完成执行
 async function runOntenp(){
     for(const key in RouterDbId){
         if(RouterDbId.hasOwnProperty(key)){

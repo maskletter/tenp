@@ -141,7 +141,7 @@ module.exports = function(argv){
 					"formidable": "^1.2.1",
 					"express": "^4.16.4",
 					"typescript": "^3.2.2",
-		    		"@tenp/core": Global_Pack.version
+		    		"@tenp/core": "^"+Global_Pack.version
 				}
 			}
 				

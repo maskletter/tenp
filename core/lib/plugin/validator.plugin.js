@@ -68,6 +68,8 @@ module.exports = class Validator{
                     error = true;
                     break;
                 }
+                //防止用户自定义的正则带有g，而导致验证失败
+                this.validationType[valid.type] && (this.validationType[valid.type].lastIndex = 0);
                 if(valid.type && value && this.validationType[valid.type] && !this.validationType[valid.type].test(value)){
                     this.createErrorMsg(config.validation.done, response, valid, name, value, 'type:'+valid.type)
                     error = true;

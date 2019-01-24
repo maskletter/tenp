@@ -1,6 +1,6 @@
 {
   "name": "@tenp/core",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "基于express/typescript的node框架",
   "main": "index.js",
   "directories": {

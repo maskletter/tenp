@@ -64,7 +64,8 @@ function run(){
       case 'i':
       case 'V':
       case 'version':
-        console.log('\r\n $ version:  '+pack.version)
+        require('../lib/version.js')(pack.version)
+        // console.log('\r\n $ version:  '+pack.version)
         process.exit()
         break;
       default:

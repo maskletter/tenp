@@ -21,7 +21,11 @@
 <a href="https://travis-ci.org/maskletter/tenp" title="Node Limitation" rel="nofollow">
    <img src="https://travis-ci.org/maskletter/tenp.svg?branch=master" height="18">
 </a>
+<a href="https://codeclimate.com/github/maskletter/tenp/maintainability">
+   <img src="https://api.codeclimate.com/v1/badges/53669772f0a4dac97bd7/maintainability" />
+</a>
 
+👉👉👉[项目文档](https://tenp.maskletter.com/dist/)
 👉👉👉[演示项目链接](https://github.com/maskletter/tenp-demo)
 <br>
 
@@ -31,10 +35,10 @@
  * [Typescript(开发语言)](http://www.typescriptlang.org/)
  * [pm2(服务)](https://github.com/Unitech/pm2)
  --- 
- * [router(路由功能)](/use.html#router路由)
- * [interceptor拦截器(用于进行请求拦截)](/kvl-plugin.html#interceptor-拦截器)
- * [Validation验证器(用于数据验证)](/kvl-plugin.html#validator-数据验证器)
- * [throw(全局接口异常)](/use.html#全局异常)
+ * [router(路由功能)](https://tenp.maskletter.com/dist/use.html#router)
+ * [interceptor拦截器(用于进行请求拦截)](https://tenp.maskletter.com/dist/tenp-plugin.html#interceptor-拦截器)
+ * [Validation验证器(用于数据验证)](https://tenp.maskletter.com/dist/tenp-plugin.html#validator-数据验证器)
+
 
 
 

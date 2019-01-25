@@ -62,7 +62,17 @@ module.exports = class Validator{
                     continue;
                 }
                 const valid = config.validation[name];
+                //设置默认值
+                if(!data[name] && valid.default){
+                    if(config.method == 'post'){
+                        request.body[name] = valid.default;
+                    }else{
+                        request.query[name] = valid.default;
+                    }
+                    data[name] = valid.default;
+                }
                 const value = data[name] || '';
+                //验证是为为空
                 if((valid.required != false) && !this.validationType.required.test(value)){
                     this.createErrorMsg(config.validation.done, response, valid, name, value, 'required')
                     error = true;
@@ -70,13 +80,21 @@ module.exports = class Validator{
                 }
                 //防止用户自定义的正则带有g，而导致验证失败
                 this.validationType[valid.type] && (this.validationType[valid.type].lastIndex = 0);
+                //验证类型是否正确
                 if(valid.type && value && this.validationType[valid.type] && !this.validationType[valid.type].test(value)){
                     this.createErrorMsg(config.validation.done, response, valid, name, value, 'type:'+valid.type)
                     error = true;
                     break;
                 }
+                //验证自定义正则
                 if(valid.regular && value && !valid.regular.test(value)){
                     this.createErrorMsg(config.validation.done, response, valid, name, value, 'regular:'+String(valid.regular))
+                    error = true;
+                    break;
+                }
+                //自定义验证规则
+                if(valid.render && value && !valid.render(value, data)){
+                    this.createErrorMsg(config.validation.done, response, valid, name, value, 'render')
                     error = true;
                     break;
                 }

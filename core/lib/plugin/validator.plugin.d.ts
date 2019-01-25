@@ -36,6 +36,8 @@ declare module "../" {
 			name?: string,
 			regular?: RegExp,
 			description?: string,
+			default?: string
+			render?: (value: string, data: any) => boolean
 			done?: ValidationDone
 		} | Function | 'string' | 'number' | 'boolean' | boolean |  any;
 

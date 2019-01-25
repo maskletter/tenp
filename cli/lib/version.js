@@ -47,6 +47,7 @@ module.exports = function(version){
 				console.log(` $ ${chalk.blue('@types/express')}   v${package.devDependencies['@types/express']}`)
 			}
 		}
+		console.log(' ')
 		// console.log(package)
 	}catch(e){
 

@@ -21,8 +21,19 @@ const DefaultTenpConfig = {
 //dev/serve模式关键字
 const DevKeyword = ['--mode','--build', '--url']
 
+const tool = {
 
-module.exports = {
+	cwd: process.cwd(),
+
+	npm_cmd: process.platform === "win32" ? "npm.cmd" : "npm",
+
+	os: process.env.PATH.toLocaleLowerCase().indexOf('window') != -1 ? 'window' : 'all',
+
+	getPackConfig: function(){
+		let result = tool.readJson(tool.cwd, 'package.json')
+	    result.tenp = tool.extendTenpConfig(result.tenp);
+	    return result
+	},
 
 	extendTenpConfig: function(config){
 		let kvlConfig = Object.assign(DefaultTenpConfig, config);
@@ -64,7 +75,7 @@ module.exports = {
 
 	readJson: function(cwd, name){
 		try {
-			return require(path.join(cwd,name))
+			return require(path.join(tool.cwd,name))
 		} catch(e) {
 			return {};
 		}
@@ -87,5 +98,6 @@ module.exports = {
 			console.log(`${chalk.yellow(data)}`)
 		}
 	}
-
 }
+
+module.exports = tool;

@@ -1,19 +1,24 @@
 const chalk = require('chalk');
-const { readJson } = require('./tool.js');
-const cwd = process.cwd();
+const { readJson, cwd } = require('./tool.js');
 
 const str = `
-   --------------------
-   --------------------
-           ----       
-           ----                             ┗|｀O′|┛ ~~tenp-% 
-           ----       ---------------------------- 
-           ----           ---------------------------- 
-           ----               ----------------------------    
-           ----                   ----------------------------  
-           ----             
-           ----   
+		   _/                                   
+	_/_/_/_/    _/_/    _/_/_/    _/_/_/    
+	 _/      _/_/_/_/  _/    _/  _/    _/   
+	_/      _/        _/    _/  _/    _/    
+	 _/_/    _/_/_/  _/    _/  _/_/_/       
+	                          _/            
+	                         _/    ┗|｀O′|┛ ~~tenp-%  
 `
+const package = readJson(cwd, 'package.json');
+
+function getDep(name){
+	return package.dependencies[name]
+}
+function getDev(name){
+	return package.devDependencies[name];
+}
+
 
 module.exports = function(version){
 
@@ -22,29 +27,29 @@ module.exports = function(version){
  $ ${chalk.blue('@tenp/cli')}        v${version}`);
 
 	try{
-		const package = readJson(cwd, 'package.json');
+		
 		if(package.dependencies){
 			console.log('  --dependencies')
-			if(package.dependencies['@tenp/core']){
-				console.log(` $ ${chalk.blue('@tenp/core')}       v${package.dependencies['@tenp/core']}`)
+			if(getDep('@tenp/core')){
+				console.log(` $ ${chalk.blue('@tenp/core')}       v${getDep('@tenp/core')}`)
 			}
-			if(package.dependencies['express']){
-				console.log(` $ ${chalk.blue('express')}          v${package.dependencies['express']}`)
+			if(getDep('express')){
+				console.log(` $ ${chalk.blue('express')}          v${getDep('express')}`)
 			}
-			if(package.dependencies['typescript']){
-				console.log(` $ ${chalk.blue('typescript')}       v${package.dependencies['typescript']}`)
+			if(getDep('typescript')){
+				console.log(` $ ${chalk.blue('typescript')}       v${getDep('typescript')}`)
 			}
-			if(package.dependencies['formidable']){
-				console.log(` $ ${chalk.blue('formidable')}       v${package.dependencies['formidable']}`)
+			if(getDep('formidable')){
+				console.log(` $ ${chalk.blue('formidable')}       v${getDep('formidable')}`)
 			}
 		}
 		if(package.devDependencies){
 			console.log('  --devDependencies')
-			if(package.devDependencies['@types/node']){
-				console.log(` $ ${chalk.blue('@types/node')}      v${package.devDependencies['@types/node']}`)
+			if(getDev('@types/node')){
+				console.log(` $ ${chalk.blue('@types/node')}      v${getDev('@types/node')}`)
 			}
-			if(package.devDependencies['@types/express']){
-				console.log(` $ ${chalk.blue('@types/express')}   v${package.devDependencies['@types/express']}`)
+			if(getDev('@types/express')){
+				console.log(` $ ${chalk.blue('@types/express')}   v${getDev('@types/express')}`)
 			}
 		}
 		console.log(' ')

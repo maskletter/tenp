@@ -101,7 +101,7 @@ function createAssets(isNo){
 
 function consoleVersion(){
 	console.log('version:  ')
-	console.log('  @tenp/core:'+Global_Pack.version);
+	console.log('  @tenp/core: ^'+Global_Pack.version);
 	console.log('  express: ^4.16.4')
 	console.log('  typescript: ^3.2.2');
 	console.log('  @types/node: 10.11.2');

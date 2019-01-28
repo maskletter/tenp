@@ -162,31 +162,29 @@ async function CreateRouter(config, Parent_RouterTree){
 
 }
 
-//创建服务器
-function RunServer(app, $tenp){
-    const httpServer = http.createServer((req,res)=> {
-
-        //加载headers
+function createServer(app, ht, $tenp, options){
+    function server(req, res){
+         //加载headers
         for(let name in $tenp.headers){
             res.setHeader(name, $tenp.headers[name])
         }
 
         app(req, res);
+    }
+       
+    if(options){
+       return http.createServer(server).listen($tenp.port);
+    }
+    return ht.createServer(options, server).listen($tenp.port);
+}
 
-    }).listen($tenp.port);
+//创建服务器
+function RunServer(app, $tenp){
+    const httpServer = createServer(app, http, $tenp);
 
     //配置Https服务器
     if($tenp.https){ 
-        const httpsServer = https.createServer($tenp.https, function(req, res){
-            //加载headers
-            for(let name in $tenp.headers){
-                res.setHeader(name, $tenp.headers[name])
-            }
-
-            app(req, res);
-
-        }).listen($tenp.https.port);
-        
+        const httpServer = createServer(app, https, $tenp, $tenp.https);
         return { httpServer, httpsServer }
     }
     

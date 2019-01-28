@@ -27,6 +27,13 @@ function CreateProtoTypeMethod(statusObject, plugin){
 
 exports = module.exports = createApplication;
 
+function expandExpress(req, app, plugin){
+  return Object.create(req, {
+    app: { configurable: true, enumerable: true, writable: true, value: app },
+    ...plugin
+  })
+}
+
 /**
  * Create an express application.
  *
@@ -61,16 +68,11 @@ function createApplication(config) {
   }
 
   // expose the prototype that will get set on requests
-  app.request = Object.create(req, {
-    app: { configurable: true, enumerable: true, writable: true, value: app },
-    ...pluginRequst
-  })
+  app.request = expandExpress(req, app, pluginRequst)
 
   // expose the prototype that will get set on responses
-  app.response = Object.create(res, {
-    app: { configurable: true, enumerable: true, writable: true, value: app },
-    ...pluginResponse
-  },)
+  app.response = expandExpress(res, app, pluginResponse)
+
 
   app.init();
   return app;

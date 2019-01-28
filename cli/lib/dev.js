@@ -5,22 +5,15 @@ const http = require('http');
 const ts = require("typescript");
 const querystring = require('querystring');
 const path = require('path');
-const cwd = process.cwd();
 const fs = require('fs');
-const os = process.env.PATH.toLocaleLowerCase().indexOf('window') != -1 ? 'window' : 'all';
 const formatHost = {
     getCanonicalFileName: function (path) { return path; },
     getCurrentDirectory: ts.sys.getCurrentDirectory,
     getNewLine: function () { return ts.sys.newLine; }
 };
-const { con, extendTenpConfig, sendSystemMessage, getEnv, readJson } = require('./tool.js');
-const npm = (process.platform === "win32" ? "npm.cmd" : "npm");
+const { con, extendTenpConfig, sendSystemMessage, getEnv, readJson, cwd, os, getPackConfig } = require('./tool.js');
 const tsconfig = readJson(cwd, 'tsconfig.json')
-const packConfig = function(){
-  let result = readJson(cwd, 'package.json')
-  result.tenp = extendTenpConfig(result.tenp);
-  return result
-}()
+const packConfig = getPackConfig();
 let process_server = undefined;
 
 const srcPath = tsconfig.compilerOptions.rootDir ? path.resolve(cwd, tsconfig.compilerOptions.rootDir) : '';

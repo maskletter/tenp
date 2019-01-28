@@ -123,7 +123,14 @@ declare global{
 			 *  port: number | 8080
 			 */
 			port: number | 8080;
-	
+
+			/**
+			 * http配置
+			 * @type {any}
+			 */
+			http2?: {
+				[argv: string]: any
+			},
 			/**
 			 * https配置
 			 */

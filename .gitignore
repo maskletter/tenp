@@ -2,3 +2,4 @@
 /package-lock.json
 /core/test/test.js
 /coverage
+/.nyc_output

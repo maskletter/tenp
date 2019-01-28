@@ -2,7 +2,7 @@
 const path = require('path');
 const { spawn } = require('child_process')
 const fs = require('fs');
-const npm_cmd = process.platform === "win32" ? "npm.cmd" : "npm";
+const { npm_cmd } = require('./tool.js');
 
 
 module.exports = function installDependencies( url, color) {
@@ -24,15 +24,3 @@ module.exports = function installDependencies( url, color) {
     })
   })
 }
-
-// module.exports.Global_DevDependencies = function(){
-
-//   return new Promise((resolve, reject) => {
-//     const spwan = spwan(,'',[], {
-//       cwd: path.resolve(__dirname,'../'),
-//       stdio: 'inherit',
-//       shell: true,
-//     })
-//   })
-
-// }

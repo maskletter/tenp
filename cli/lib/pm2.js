@@ -11,14 +11,10 @@ const path = require('path');
 const cwd = process.cwd();
 const fs = require('fs');
 const ts = require("typescript");
-const { con, extendTenpConfig, getEnv, readJson } = require('./tool.js');
+const { con, extendTenpConfig, getEnv, readJson, getPackConfig, npm_cmd } = require('./tool.js');
 const numCPUs = require('os').cpus().length;
 const tsconfig = readJson(cwd, 'tsconfig.json')
-const packConfig = function(){
-  let result = readJson(cwd, 'package.json')
-  result.tenp = extendTenpConfig(result.tenp);
-  return result
-}()
+const packConfig = getPackConfig();
 
 const pm2 = new PM2Lib();
 
@@ -30,7 +26,7 @@ module.exports.start = function(argv){
 	
 
 	if(argv.indexOf('--build') != -1){
-		const spwan = spawn(process.platform === "win32" ? "npm.cmd" : "npm", ['run', 'dev:build'], {
+		const spwan = spawn(npm_cmd, ['run', 'dev:build'], {
 	      cwd: cwd,
 	      stdio: 'inherit',
 	      shell: true,

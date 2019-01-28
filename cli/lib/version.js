@@ -18,7 +18,12 @@ function getDep(name){
 function getDev(name){
 	return package.devDependencies[name];
 }
-
+function consoler(name, fun){
+	fun = fun || getDep;
+	if(fun(name)){
+		console.log(` $ ${chalk.blue(name)}       v${fun(name)}`)
+	}
+}
 
 module.exports = function(version){
 
@@ -30,27 +35,17 @@ module.exports = function(version){
 		
 		if(package.dependencies){
 			console.log('  --dependencies')
-			if(getDep('@tenp/core')){
-				console.log(` $ ${chalk.blue('@tenp/core')}       v${getDep('@tenp/core')}`)
-			}
-			if(getDep('express')){
-				console.log(` $ ${chalk.blue('express')}          v${getDep('express')}`)
-			}
-			if(getDep('typescript')){
-				console.log(` $ ${chalk.blue('typescript')}       v${getDep('typescript')}`)
-			}
-			if(getDep('formidable')){
-				console.log(` $ ${chalk.blue('formidable')}       v${getDep('formidable')}`)
-			}
+		
+			consoler('@tenp/core');
+			consoler('express');
+			consoler('typescript');
+			consoler('formidable');
+			
 		}
 		if(package.devDependencies){
 			console.log('  --devDependencies')
-			if(getDev('@types/node')){
-				console.log(` $ ${chalk.blue('@types/node')}      v${getDev('@types/node')}`)
-			}
-			if(getDev('@types/express')){
-				console.log(` $ ${chalk.blue('@types/express')}   v${getDev('@types/express')}`)
-			}
+			consoler('@types/node', getDev)
+			consoler('@types/express', getDev)
 		}
 		console.log(' ')
 		// console.log(package)

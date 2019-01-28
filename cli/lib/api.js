@@ -14,35 +14,29 @@ var ApiTree = [];
 
 function FillingRouter(__apiTree, $child){
 	
-	var query = [];
-	if($child.validation){
-		for(var key in $child.validation){
-			if(key == 'template' || key == 'disable' || key == '$$return')  continue;
-			query.push({ 
-				type: $child.validation[key].type, 
-				name: $child.validation[key].name,
-				isEmpty: $child.validation[key].isEmpty,
-				description: $child.validation[key].description
-			})
-		}
+	// var query = [];
+	// if($child.validation){
+	// 	for(var key in $child.validation){
+	// 		if(key == 'template' || key == 'disable' || key == '$$return')  continue;
+	// 		query.push($child.validation[key])
+	// 	}
 
 
-	}
+	// }
 
-	for(let method of $child.method){
+	// for(let method of $child.method){
 
-
-		__apiTree.push({
-			[$child.url]: {
-				method: method,
-				query: query,
-				name: $child.name || $child.url
-			}
-		})
+	// 	__apiTree.push({
+	// 		[$child.url]: {
+	// 			method: method,
+	// 			query: query,
+	// 			name: $child.name || $child.url
+	// 		}
+	// 	})
 
 
 			
-	}
+	// }
 
 
 }

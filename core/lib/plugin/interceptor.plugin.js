@@ -36,10 +36,7 @@ module.exports =  class Interceptor{
             if(!$parent) return [];
             const _interceptor = tool.transArray($parent.config.interceptor);
             const _level = $parent.config.interceptorLevel || 0;
-            
-            if(_level == 2 || _level == 4){
-
-            }else if(_level == 3){
+            if(_level == 3){
                 const grandParent = this.FindById($parent.parentId)
                 eachParent(grandParent.parentId);
             }else if(_level == 0 || _level == 1){

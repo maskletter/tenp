@@ -3,7 +3,7 @@
   "bin": {
     "tenp": "./bin/tenp"
   },
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "tenp脚手架",
   "scripts": {
   	"start": "node ./bin/tenp",

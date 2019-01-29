@@ -171,11 +171,11 @@ function createServer(app, ht, $tenp, options){
 
         app(req, res);
     }
-       
+    
     if(options){
-       return http.createServer(server).listen($tenp.port);
+       return http.createServer(options, server).listen($tenp.port);
     }
-    return ht.createServer(options, server).listen($tenp.port);
+    return ht.createServer(server).listen($tenp.port);
 }
 
 //创建服务器

@@ -1,7 +1,7 @@
 "use strict";
 
 const tenp = require('./lib/main.js');
-const { Router: Router2, config: config2 } = require('./lib/router')
+const { Router: Router2, config: config2, createController, controller } = require('./lib/router')
 
 
 function ObjectFind(data, name){
@@ -21,7 +21,8 @@ module.exports = function(){};
 module.exports.default = function(){};
 
 module.exports.Main = tenp;
-
+module.exports.createController = createController;
+module.exports.controller = controller;
 module.exports.Router2 = Router2;
 module.exports.Router = Router2;
 module.exports.config = config2;

@@ -168,7 +168,10 @@ declare global{
 			 * url: string
 			 */
 			url: string
-	
+			/**
+			 * 控制器
+			 */
+			controller?: string
 			
 		}
 		interface RouterTree{
@@ -179,6 +182,9 @@ declare global{
 			config: tenp.Router,
 			id: string
 		}
+		interface controllerInterface{
+			(request: tenp.Request, response: tenp.Response): void
+		}
 	}
 
 }
@@ -186,6 +192,8 @@ declare global{
 		
 
 export const Router:(config: tenp.Router) => any;
+export const createController:(name: string, callback: tenp.controllerInterface) => any;
+export const controller:(name: string) => (request: tenp.Request, response: tenp.Response) => void;
 export const config:(config: tenp.RouterConfig) => any;
 export const Main:(config: tenp.InitConfig, app?: Application) => Promise<{ app: Application, httpServer: http.Server, httpsServer: https.Server }>;
 export const data:() => any;

@@ -6,6 +6,8 @@ const express = require('express');
 
 let RouterUrl = {};
 
+let ControllerMap = {};
+
 function Forward(path, config = {}){
 	const data = RouterUrl[path];
 	if(data){
@@ -82,6 +84,22 @@ module.exports = function(method, config){
 module.exports.Forward = Forward;
 module.exports.appRouter = app;
 module.exports.RouterUrl = RouterUrl;
+module.exports.createController = function(name, callback){
+	if(ControllerMap[name]){
+		console.log(`\r\n\x1B[31m error  控制器已存在\x1B[39m\r\n`)
+	}else{
+		ControllerMap[name] = callback;
+		return callback
+	}
+}
+module.exports.controller = function(name, callback){
+	if(!ControllerMap[name]){
+		console.log(`\r\n\x1B[31m error  控制器未创建\x1B[39m\r\n`)
+	}
+	return ControllerMap[name] || function(req, res){
+		res.send('<h1>404 not Controller</h1>')
+	};
+}
 
 //@Router
 module.exports.Router  = function(config){
@@ -108,7 +126,7 @@ module.exports.config = function(config){
 		target.$$childConfig.push({
 			method: method,
 			...config,
-			process: target[propertyKey]
+			process: config.controller ? ControllerMap[config.controller] : target[propertyKey]
 		})
 	}
 }

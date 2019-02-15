@@ -46,20 +46,30 @@ function LoaderPlugin(request, response, config){
 	}()
 }
 
+//全局错误处理
+function GlobalError(request, response, config, error){
+	const status = error.status || 500;
+	if(config.$tenp.throw){
+		config.$tenp.throw(request, response, status, error.error || error)
+	}else{
+		response.status(500).send(`<pre>${new Error(error).stack}</pre>`)
+	}
+}
+
 //运行路由
 function TransferRouter(request, response, config){
 
 	//运行插件
 	LoaderPlugin(request, response, config).then(_ => {
-		config.process.apply(config.$class, [ request, response ]);
+		const cb = config.process.apply(config.$class, [ request, response ]);
+		cb && cb.catch && cb.catch(error => {
+			GlobalError(request, response, config, error)
+		})
 	}).catch(error => {
-		const status = error.status || 500;
-		if(config.$tenp.throw){
-			config.$tenp.throw(request, response, status, error.error || error)
-		}else{
-			response.status(500).send(`<pre>${new Error(error).stack}</pre>`)
-		}
+		GlobalError(request, response, config, error)
 	})
+
+	
 
 }
 
@@ -92,7 +102,7 @@ module.exports.createController = function(name, callback){
 		return callback
 	}
 }
-module.exports.controller = function(name, callback){
+const controller = module.exports.controller = function(name, callback){
 	if(!ControllerMap[name]){
 		console.log(`\r\n\x1B[31m error  控制器未创建\x1B[39m\r\n`)
 	}
@@ -126,7 +136,7 @@ module.exports.config = function(config){
 		target.$$childConfig.push({
 			method: method,
 			...config,
-			process: config.controller ? ControllerMap[config.controller] : target[propertyKey]
+			process: config.controller ? controller(config.controller) : target[propertyKey]
 		})
 	}
 }

@@ -2,59 +2,57 @@
 
 
 
-module.exports = class Injectable{
+module.exports = class provide{
 
     constructor(){}
 
     //初始化注入器
-    initInjectable(injectableMap = []){
+    initProvide(provideMap = []){
         let __map = {};
-        for(const injectable of injectableMap){
-            __map[injectable.name] = new injectable.class(injectable.data || undefined)
-            // console.log(__map[injectable.name])
+        for(const provide of provideMap){
+            __map[provide.name] = new provide.class(provide.data || undefined)
         }
         return __map;
     }
 
     onInit(config){
         this.RouterDbId = require('../main.js').RouterDbId;
-        this.global_injectable = this.initInjectable(config.injectable);
+        this.global_provide = this.initProvide(config.provide);
     }
 
-    findInjectable(_id){
-        let injectableMap = {};
+    findProvide(_id, __router){
+        let provideMap = {};
         const $this = this;
         if(!_id){
-            return { ...this.global_injectable }
+            return { ...this.global_provide }
         }else{
-            getParent(_id);
+            getParent(_id, __router);
         }
        
-        function getParent(id){
+        function getParent(id, __router){
             
-            const $router = $this.RouterDbId[id];
-            injectableMap = Object.assign(injectableMap, $this.initInjectable($router.config.injectable));
+            const $router =  __router || $this.RouterDbId[id];
+            provideMap = Object.assign(provideMap, $this.initProvide($router.config.provide));
             if($router.$$parentId){
                 getParent($router.$$parentId)
             }else{
-                injectableMap = Object.assign(injectableMap, $this.global_injectable)
+                provideMap = Object.assign(provideMap, $this.global_provide)
             }
         }
 
-        return injectableMap;
+        return provideMap;
 
     }
 
     onInitClass({$router, currentConfig, parentConfig}){
-  
-        const injectableMap = this.findInjectable($router.$$parentId);
-        // console.log(injectableMap)
-        for(let key in $router){
-            if(key.substr(0,16) != 'tenp_injectable_')  continue;
-            let name = key.substr(16);
-            let classname = $router[key];
-            $router[classname] = injectableMap[name];
+       
+        const provideMap = this.findProvide($router.$$id, { config: currentConfig });
 
+        for(let key in $router){
+            if(key.substr(0,13) != 'tenp_provide_')  continue;
+            let name = key.substr(13);
+            let classname = $router[key];
+            $router[classname] = provideMap[name];
             delete $router.key
         }
         
@@ -69,11 +67,11 @@ module.exports = class Injectable{
 
 
 
-module.exports.Injectable = function(name){
+module.exports.inject = function(name){
 
 	return function (target, propertyKey, descriptor) {
         target[propertyKey] = {}
-        target['tenp_injectable_'+name] = propertyKey;
+        target['tenp_provide_'+name] = propertyKey;
     }
 
 }

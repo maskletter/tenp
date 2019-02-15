@@ -3,16 +3,16 @@
 declare module "../" {
 
     interface CommonInit{
-        injectable?: Array<{class: Function, name: String, data?: any }>
+        provide?: Array<{class: Function, name: String, data?: any }>
     }
 
     interface Router{
-        injectable?: Array<{class: Function, name: String, data?: any }>
+        provide?: Array<{class: Function, name: String, data?: any }>
     }
 
 
     //依赖注入
-	function Injectable(name: string): any
+	function inject(name: string): any
 
 }
 

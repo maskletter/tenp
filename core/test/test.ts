@@ -1,7 +1,7 @@
 
 import { expect } from 'chai';
 import 'mocha';
-import tenp, { Main, Router, config, Injectable } from '..'
+import tenp, { Main, Router, config, inject } from '..'
 import { objectToBoolean } from './tool'
 import * as express from 'express'
 import * as http from 'http'
@@ -173,7 +173,7 @@ describe('插件模块', () => {
     }
     @Router({})
     class TestRouter extends tenp{
-      @Injectable('test-injectable') public test: TestInjectable;
+      @inject('test-injectable') public test: TestInjectable;
       onInit(){
         expect(this.test).to.be.an.instanceof(TestInjectable);
       }
@@ -181,7 +181,7 @@ describe('插件模块', () => {
     Main({ 
       port: 3689, 
       router: [ TestRouter ],
-      injectable: [ { class: TestInjectable, name: 'test-injectable' } ]
+      provide: [ { class: TestInjectable, name: 'test-injectable' } ]
     })
 
   })

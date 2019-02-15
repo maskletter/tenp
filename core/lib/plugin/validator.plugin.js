@@ -36,12 +36,13 @@ module.exports = class Validator{
   
     }
 
-    createErrorMsg(done, response, valid, name, value, condition){
+    createErrorMsg(done, response, valid, name, value, step, msg){
         const json = {
             name,
-            alias: valid.name,
-            type: valid.type,
-            condition,
+            alias: valid.name||name,
+            type: valid.type||'string',
+            step: step,
+            msg: msg,
             value,
         }
         if(done){
@@ -71,10 +72,11 @@ module.exports = class Validator{
                     }
                     data[name] = valid.default;
                 }
+                valid.msg = valid.msg || {};
                 const value = data[name] || '';
                 //验证是为为空
                 if((valid.required != false) && !this.validationType.required.test(value)){
-                    this.createErrorMsg(config.validation.done, response, valid, name, value, 'required')
+                    this.createErrorMsg(config.validation.done, response, valid, name, value, 'required', valid.msg.required || 'required')
                     error = true;
                     break;
                 }
@@ -82,19 +84,19 @@ module.exports = class Validator{
                 this.validationType[valid.type] && (this.validationType[valid.type].lastIndex = 0);
                 //验证类型是否正确
                 if(valid.type && value && this.validationType[valid.type] && !this.validationType[valid.type].test(value)){
-                    this.createErrorMsg(config.validation.done, response, valid, name, value, 'type:'+valid.type)
+                    this.createErrorMsg(config.validation.done, response, valid, name, value, 'type', valid.msg.type || 'type:'+valid.type)
                     error = true;
                     break;
                 }
                 //验证自定义正则
                 if(valid.regular && value && !valid.regular.test(value)){
-                    this.createErrorMsg(config.validation.done, response, valid, name, value, 'regular:'+String(valid.regular))
+                    this.createErrorMsg(config.validation.done, response, valid, name, value, 'regular', valid.msg.regular || 'regular:'+String(valid.regular))
                     error = true;
                     break;
                 }
                 //自定义验证规则
-                if(valid.render && value && !valid.render(value, data)){
-                    this.createErrorMsg(config.validation.done, response, valid, name, value, 'render')
+                if(valid.valid && value && valid.valid(value, data) == false){
+                    this.createErrorMsg(config.validation.done, response, valid, name, value, 'valid', valid.msg.valid || 'valid')
                     error = true;
                     break;
                 }

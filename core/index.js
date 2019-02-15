@@ -48,4 +48,4 @@ module.exports.FindById = function(id){
 	return tenp.RouterDbId[id]
 }
 
-module.exports.Injectable = require('./lib/plugin/Injectable.plugin').Injectable;
+module.exports.inject = require('./lib/plugin/Injectable.plugin').inject;

@@ -8,9 +8,7 @@ import './plugin/receive.plugin'
 import './plugin/validator.plugin'
 import './plugin/Injectable.plugin'
 
-
-
-declare class tenp {
+declare abstract class tenp {
 	onInit(): void;
 	onAfter(): void;
 	onTenp(): void;
@@ -162,7 +160,7 @@ declare global{
 			 * 请求方式
 			 * type: Array<string> | string
 			 */
-			type: Array<string> | string
+			type: Array<string> | 'get'|'post'|'put'|'head'|'delete'|'options'|'trace'|'copy'|'lock'|'mkcol'|'move'|'purge'|'propfind'|'proppatch'|'unlock'|'report'|'mkactivity'|'checkout'|'merge'|'m-search'|'notify'|'subscribe'|'unsubscribe'|'patch'|'search'|'connect'
 			/**
 			 * 路径
 			 * url: string
@@ -181,6 +179,7 @@ declare global{
 			parentId: string
 			config: tenp.Router,
 			id: string
+			$router: any
 		}
 		interface controllerInterface{
 			(request: tenp.Request, response: tenp.Response): void
@@ -192,7 +191,7 @@ declare global{
 		
 
 export const Router:(config: tenp.Router) => any;
-export const createController:(name: string, callback: tenp.controllerInterface) => any;
+export const createController:(name: string, callback: tenp.controllerInterface) => Function;
 export const controller:(name: string) => (request: tenp.Request, response: tenp.Response) => void;
 export const config:(config: tenp.RouterConfig) => any;
 export const Main:(config: tenp.InitConfig, app?: Application) => Promise<{ app: Application, httpServer: http.Server, httpsServer: https.Server }>;

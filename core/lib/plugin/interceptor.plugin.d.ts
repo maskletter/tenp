@@ -51,7 +51,7 @@ declare module "../index" {
 	 * 拦截器
 	 */
 	interface Interceptor{
-		(request: tenp.Request, response: tenp.Response): void
+		(request: tenp.Request, response: tenp.Response): any
 	}
 	interface InterceptorObject {
 

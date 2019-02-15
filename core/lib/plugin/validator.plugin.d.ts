@@ -20,7 +20,7 @@ declare module "../" {
 		/**
 		 * 验证器默认错误回调
 		 */
-		validatorDone?(): void
+		validatorDone?: ValidationDone
 	}
 
     interface Validation {
@@ -32,14 +32,15 @@ declare module "../" {
 
 		[argy: string]: {
 			type?: 'string' | 'number' | 'boolean' | any,
+			msg?: { regular?: string, type?: string, required?: string, valid?: string },
 			required?: boolean | false,
 			name?: string,
 			regular?: RegExp,
 			description?: string,
-			default?: string
-			render?: (value: string, data: any) => boolean
+			default?: string 
+			valid?: (value: string, data: any) => boolean
 			done?: ValidationDone
-		} | Function | 'string' | 'number' | 'boolean' | boolean |  any;
+		} | Function | 'string' | 'number' | 'boolean' | boolean;
 
     }
     
@@ -48,8 +49,10 @@ declare module "../" {
 	 */
 	interface ValidationError {
 		name: string,
-		condition: string,
+		msg: string,
 		value: string,
+		type: string,
+		step: string,
 		alias: string
 	}
 	interface ValidationDone {

@@ -80,6 +80,7 @@ describe('路由模块', () => {
       url: '/hello',
       interceptor: [ interceptor ],
       interceptorLevel: 0,
+      provide_instancep: {},
       router: [ SecondRouter ]
     })
     

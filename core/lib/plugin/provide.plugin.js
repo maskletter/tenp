@@ -78,3 +78,13 @@ module.exports = class ProvidePlugin {
     }
 
 }
+
+
+module.exports.inject = function(name){
+
+    return function (target, propertyKey, descriptor) {
+        target[propertyKey] = {}
+        target['tenp_provide_'+name] = propertyKey;
+    }
+
+}

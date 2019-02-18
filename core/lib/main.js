@@ -8,7 +8,7 @@ const tool = require('./tool')
 const router = require('./router')
 const Validation = require('./plugin/validator.plugin')
 const Receive = require('./plugin/receive.plugin')
-const InjectablePlugin = require('./plugin/Injectable.plugin');
+const ProvidePlugin = require('./plugin/provide.plugin');
 const fs = require('fs');
 const path = require('path');
 const Interceptor = require('./plugin/interceptor.plugin')
@@ -38,7 +38,7 @@ function CreateClassSandbox($router, plugin){
     return SandboxMap[$router.$$id];
 }
 
-//寻扎房间
+//寻找房间
 function findClassSandbox(id = ''){
     if(!id) return {};
     else return SandboxMap[id] || {}
@@ -47,6 +47,7 @@ function findClassSandbox(id = ''){
 //运行插件
 function LoaderPlugin($router, parentId = '', pluginMap){
     const sandboxMap = CreateClassSandbox($router)
+    const $routerConfig = $router.$$config;
     return async () => {
         async function run(index){
             const plugin = pluginMap[index];
@@ -56,7 +57,8 @@ function LoaderPlugin($router, parentId = '', pluginMap){
                 let defaultConfig = Object.assign({}, sandboxMap.$$default);
                 sandboxMap[className] = defaultConfig;
                 if(plugin.onInitClass){
-                    sandboxMap[className] = await plugin.onInitClass({ $router, currentConfig: sandboxMap[className], parentConfig: parentConfig}) || defaultConfig;
+                    // sandboxMap[className] = await plugin.onInitClass({ $router, currentConfig: sandboxMap[className], parentConfig: parentConfig}) || defaultConfig;
+                    await plugin.onInitClass({ $router, currentConfig: $routerConfig, parentConfig: parentConfig});
                 }
                 index++;
                 await run(index)
@@ -193,7 +195,7 @@ function RunServer(app, $tenp){
 
 //总入口
 module.exports = async function(config, publicApp){
-    config.plugin = [Interceptor, Receive,Validation, InjectablePlugin,...tool.transArray(config.plugin)]
+    config.plugin = [Interceptor, Receive,Validation, ProvidePlugin,...tool.transArray(config.plugin)]
     config.router = tool.transArray(config.router);
     const $tenp = Object.assign({
         baseUrl: '',

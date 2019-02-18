@@ -61,10 +61,10 @@ module.exports =  class Interceptor{
         let noParentInter = false;
 
         //避免在同一个class下的接口，进行多次追寻router拦截器
-        if(this.interceptorDb[id]){
-            routerInterceptor = [].concat(this.interceptorDb[id]);
-            noParentInter = true;
-        }
+        // if(this.interceptorDb[id]){
+        //     routerInterceptor = [].concat(this.interceptorDb[id]);
+        //     noParentInter = true;
+        // }
    
         if(level == 4 || level == 2){
             interceptor = thisInterceptor;
@@ -95,7 +95,6 @@ module.exports =  class Interceptor{
     setInterceptor(config){
         const interceptor = this.getInterceptor(config);
         config.interceptor = interceptor;
-
     }
 
 

@@ -6,7 +6,7 @@ import * as https from 'https';
 import './plugin/interceptor.plugin'
 import './plugin/receive.plugin'
 import './plugin/validator.plugin'
-import './plugin/Injectable.plugin'
+import './plugin/provide.plugin'
 
 declare abstract class tenp {
 	onInit(): void;

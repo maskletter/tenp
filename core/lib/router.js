@@ -102,13 +102,21 @@ module.exports.createController = function(name, callback){
 		return callback
 	}
 }
-const controller = module.exports.controller = function(name, callback){
+const getController = module.exports.getController = function(name, callback){
 	if(!ControllerMap[name]){
 		console.log(`\r\n\x1B[31m error  控制器未创建\x1B[39m\r\n`)
 	}
 	return ControllerMap[name] || function(req, res){
 		res.send('<h1>404 not Controller</h1>')
 	};
+}
+
+// @Controller
+module.exports.Controller = function(name){
+	return function(target, propertyKey){
+		let $status = target.$$childConfig[target.$$childConfig.length-1];
+		$status.process = getController(name)
+	}
 }
 
 //@Router
@@ -119,12 +127,31 @@ module.exports.Router  = function(config){
 	}
 }
 
+const setUrlConfig = function(target, propertyKey, config, method){
+	if(!target.$$childConfig){
+		target.$$childConfig = [];
+	}
+	
+	delete config.type;
+	target.$$childConfig.push({
+		method: method,
+		...config,
+		process: config.controller ? getController(config.controller) : target[propertyKey]
+	})
+}
+
+for(let data of ['Get','Post','Head','Put','Delete']){
+	module.exports[data] = function(config){
+		return function(target, propertyKey){
+			config = typeof(config) == 'string' ? { url: config } : config;
+			setUrlConfig(target, propertyKey, config, [data.toLocaleLowerCase()])
+		}
+	}
+}
+
 //@config
 module.exports.config = function(config){
-	return function(target, propertyKey, a){
-		if(!target.$$childConfig){
-			target.$$childConfig = [];
-		}
+	return function(target, propertyKey){
 		let method = function(){
 			if(typeof(config.type) == 'string'){
 				return [config.type.toLocaleLowerCase()]
@@ -132,11 +159,6 @@ module.exports.config = function(config){
 				return config.type.map(v => v.toLocaleLowerCase())
 			}
 		}();
-		delete config.type;
-		target.$$childConfig.push({
-			method: method,
-			...config,
-			process: config.controller ? controller(config.controller) : target[propertyKey]
-		})
+		setUrlConfig(target, propertyKey, config, method)
 	}
 }

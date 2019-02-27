@@ -157,21 +157,22 @@ declare global{
 			/**路由名字，也许会有大用*/
 			name?: string;
 			/**
-			 * 请求方式
-			 * type: Array<string> | string
-			 */
-			type: Array<string> | 'get'|'post'|'put'|'head'|'delete'|'options'|'trace'|'copy'|'lock'|'mkcol'|'move'|'purge'|'propfind'|'proppatch'|'unlock'|'report'|'mkactivity'|'checkout'|'merge'|'m-search'|'notify'|'subscribe'|'unsubscribe'|'patch'|'search'|'connect'
-			/**
 			 * 路径
 			 * url: string
 			 */
 			url: string
-			/**
-			 * 控制器
-			 */
-			controller?: string
-			
 		}
+
+		interface MethodConfig extends RouterConfig {}
+
+		interface MethodCommonConfig extends RouterConfig {
+			/**
+			 * 请求方式
+			 * type: Array<string> | string
+			 */
+			type: Array<string> | 'get'|'post'|'put'|'head'|'delete'|'options'|'trace'|'copy'|'lock'|'mkcol'|'move'|'purge'|'propfind'|'proppatch'|'unlock'|'report'|'mkactivity'|'checkout'|'merge'|'m-search'|'notify'|'subscribe'|'unsubscribe'|'patch'|'search'|'connect'
+		}
+
 		interface RouterTree{
 			children: this[], 
 			class: Function,
@@ -188,12 +189,21 @@ declare global{
 
 }
 
+interface Method{
+	(config: tenp.RouterConfig): any
+	(url: string): any
+}
 		
-
+export const Controller:(name: string) => any;
 export const Router:(config: tenp.Router) => any;
+export const Get: Method;
+export const Post: Method;
+export const Delete: Method;
+export const Put: Method;
+export const Head: Method;
 export const createController:(name: string, callback: tenp.controllerInterface) => Function;
-export const controller:(name: string) => (request: tenp.Request, response: tenp.Response) => void;
-export const config:(config: tenp.RouterConfig) => any;
+export const getController:(name: string) => (request: tenp.Request, response: tenp.Response) => void;
+export const config:(config: tenp.MethodCommonConfig) => any;
 export const Main:(config: tenp.InitConfig, app?: Application) => Promise<{ app: Application, httpServer: http.Server, httpsServer: https.Server }>;
 export const data:() => any;
 export const Global:() => any;

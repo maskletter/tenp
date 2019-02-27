@@ -1,7 +1,7 @@
 "use strict";
 
 const tenp = require('./lib/main.js');
-const { Router: Router2, config: config2, createController, controller } = require('./lib/router')
+const { Router, config, createController, getController, Controller, Get, Post, Delete, Put, Head } = require('./lib/router')
 
 
 function ObjectFind(data, name){
@@ -22,10 +22,15 @@ module.exports.default = function(){};
 
 module.exports.Main = tenp;
 module.exports.createController = createController;
-module.exports.controller = controller;
-module.exports.Router2 = Router2;
-module.exports.Router = Router2;
-module.exports.config = config2;
+module.exports.getController = getController;
+module.exports.Controller = Controller;
+module.exports.Router = Router;
+module.exports.config = config;
+module.exports.Get = Get;
+module.exports.Post = Post;
+module.exports.Delete = Delete;
+module.exports.Put = Put;
+module.exports.Head = Head;
 module.exports.Global = function(){
 	return function (target, propertyKey, descriptor) {
 		target[propertyKey] = '$$global'

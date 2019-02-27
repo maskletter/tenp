@@ -38,7 +38,7 @@ function CreateClassSandbox($router, plugin){
     return SandboxMap[$router.$$id];
 }
 
-//寻找房间
+//寻扎房间
 function findClassSandbox(id = ''){
     if(!id) return {};
     else return SandboxMap[id] || {}
@@ -68,7 +68,6 @@ function LoaderPlugin($router, parentId = '', pluginMap){
     }
 
 }
-
 
 //生成url方法
 async function CreateUrl(config, pluginMaps){
@@ -200,7 +199,6 @@ module.exports = async function(config, publicApp){
     const $tenp = Object.assign({
         baseUrl: '',
     },config);
-    
     //初始化插件实例
     $tenp.plugin = $tenp.plugin.map(data => {
         let PluginClass = null;

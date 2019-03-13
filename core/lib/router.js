@@ -114,7 +114,7 @@ const getController = module.exports.getController = function(name, callback){
 // @Controller
 module.exports.Controller = function(name, $this, arguments){
 	if($this && arguments){
-		getController('tourist.getCollection').apply($this, arguments);
+		getController(name).apply($this, arguments);
 	}else{
 		return function(target, propertyKey){
 			let $status = target.$$childConfig[target.$$childConfig.length-1];

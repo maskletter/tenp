@@ -194,7 +194,12 @@ interface Method{
 	(url: string): any
 }
 		
-export const Controller:(name: string) => any;
+interface Controller{
+	(name: string): any
+	(name: string, $this: any, args: any): Function
+}
+		
+export const Controller: Controller;
 export const Router:(config: tenp.Router) => any;
 export const Get: Method;
 export const Post: Method;

@@ -35,7 +35,7 @@ async function createPackage(name){
 		process.exit();
 	}
 	pacakge.version = await readlinePromise('  version: (1.0.0)') || '1.0.0';
-	pacakge.description = await readlinePromise('  description:') || {};
+	pacakge.description = await readlinePromise('  description:') || '';
 	pacakge.main = await readlinePromise('  entry point: (server.js)') || 'server.js';
 	const testCommand = await readlinePromise('  test command:');
 	const gitRepository = await readlinePromise('  git repository:');

@@ -1,4 +1,4 @@
-"use strict";
+// "use strict";
 
 const tool = require('./tool')
 const app = require('express').Router();
@@ -112,10 +112,14 @@ const getController = module.exports.getController = function(name, callback){
 }
 
 // @Controller
-module.exports.Controller = function(name){
-	return function(target, propertyKey){
-		let $status = target.$$childConfig[target.$$childConfig.length-1];
-		$status.process = getController(name)
+module.exports.Controller = function(name, $this, arguments){
+	if($this && arguments){
+		getController('tourist.getCollection').apply($this, arguments);
+	}else{
+		return function(target, propertyKey){
+			let $status = target.$$childConfig[target.$$childConfig.length-1];
+			$status.process = getController(name)
+		}
 	}
 }
 

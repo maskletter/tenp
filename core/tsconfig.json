@@ -1,27 +1,27 @@
-
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "../",
+    "declaration": true,
+    "baseUrl": "src",
     "sourceMap": false,
-    "declaration": false,
     "noErrorTruncation": true,
-    "allowJs": true,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "strict": true,
     "alwaysStrict": false,
+    "strictNullChecks": false,
     "noImplicitUseStrict": false,
-    "noImplicitAny": true, 
+    "noImplicitAny": true,
     "allowSyntheticDefaultImports": false,
     "strictPropertyInitialization": false,
     "target": "es5",
-    "rootDir":"../",      
-    "outDir":"./dist",     
-    "watch":true,             
+    "rootDir": ".",
+    "outDir": "./dist",
+    "watch": true,
     "typeRoots": [
-      "../node_modules/@types", "./types", "../lib/plugin"
+      "node_modules/@types",
+      "./types"
     ],
     "lib": [
       "es2016",
@@ -29,6 +29,7 @@
     ]
   },
   "include": [
-    "../**/*"
+    "./**/*",
+    "./types/*"
   ]
 }

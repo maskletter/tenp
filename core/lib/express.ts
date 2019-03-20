@@ -2,7 +2,8 @@
 /**
  * 拷贝自express/lib/express.js
  */
-
+declare const require: any;
+declare const exports: any;
 var bodyParser = require('body-parser')
 var EventEmitter = require('events').EventEmitter;
 var mixin = require('merge-descriptors');
@@ -12,7 +13,7 @@ var Router = require('express/lib/router');
 var req = require('express/lib/request');
 var res = require('express/lib/response');
 
-function CreateProtoTypeMethod(statusObject, plugin){
+function CreateProtoTypeMethod(statusObject: any, plugin: any){
   for(let key in plugin){
     if(plugin.hasOwnProperty(key)){
       statusObject[key] = { configurable: true, enumerable: true, writable: true, value:plugin[key] }
@@ -25,9 +26,10 @@ function CreateProtoTypeMethod(statusObject, plugin){
  * Expose `createApplication()`.
  */
 
-exports = module.exports = createApplication;
+export default createApplication;
+// exports = module.exports = createApplication;
 
-function expandExpress(req, app, plugin){
+function expandExpress(req: any, app: any, plugin: any){
   return Object.create(req, {
     app: { configurable: true, enumerable: true, writable: true, value: app },
     ...plugin
@@ -41,13 +43,13 @@ function expandExpress(req, app, plugin){
  * @api public
  */
 
-function createApplication(config) {
+function createApplication(config: any) {
 
   config = Object.assign({
     plugin: []
   }, config)
 
-  var app = function(req, res, next) {
+  var app: any = function(req: any, res: any, next: any) {
     app.handle(req, res, next);
   };
 
@@ -81,26 +83,24 @@ function createApplication(config) {
 /**
  * Expose the prototypes.
  */
-
-exports.application = proto;
-exports.request = req;
-exports.response = res;
+export const application = proto
+export const request = req
+export const response = res
 
 /**
  * Expose constructors.
  */
 
-exports.Route = Route;
-exports.Router = Router;
+export { Route, Router }
 
 /**
  * Expose middleware
  */
 
-exports.json = bodyParser.json
-exports.query = require('express/lib/middleware/query');
-exports.static = require('serve-static');
-exports.urlencoded = bodyParser.urlencoded
+export const json = bodyParser.json
+export const query = require('express/lib/middleware/query');
+export const serveStatic = require('serve-static');
+export const urlencoded = bodyParser.urlencoded
 
 /**
  * Replace removed middleware with an appropriate error message.
@@ -127,6 +127,7 @@ var removedMiddlewares = [
 ]
 
 removedMiddlewares.forEach(function (name) {
+
   Object.defineProperty(exports, name, {
     get: function () {
       throw new Error('Most middleware (like ' + name + ') is no longer bundled with Express and must be installed separately. Please see https://github.com/senchalabs/connect#middleware.');

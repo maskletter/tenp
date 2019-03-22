@@ -24,10 +24,10 @@ exports.Router = function (config) {
         if (config.router) {
             config.router.forEach(function (Class) {
                 if (Class.data) {
-                    Class.class.$$parentId = key;
+                    Class.class.prototype.$$parentId = key;
                 }
                 else {
-                    Class.$$parentId = key;
+                    Class.prototype.$$parentId = key;
                 }
             });
         }
@@ -40,7 +40,7 @@ exports.Router = function (config) {
             path: exports.dbPathInfo.slice()
         };
         exports.dbPathInfo = [];
-        target.$$id = target.prototype.$$id = key;
+        target.prototype.$$id = key;
     };
 };
 //Interface entry
@@ -55,27 +55,37 @@ exports.Config = function (config) {
         });
     };
 };
-function forwardMethod(method, config) {
+function forwardMethod(target, propertyKey, method, config) {
     if (typeof (config) == 'string') {
-        exports.Config({ type: method, url: config });
+        exports.Config({ type: method, url: config })(target, propertyKey);
     }
     else {
-        exports.Config(__assign({ type: method }, config));
+        exports.Config(__assign({ type: method }, config))(target, propertyKey);
     }
 }
 //Simplify request method
 exports.Get = function (config) {
-    forwardMethod('get', config);
+    return function (target, propertyKey) {
+        forwardMethod(target, propertyKey, 'get', config);
+    };
 };
 exports.Post = function (config) {
-    forwardMethod('post', config);
+    return function (target, propertyKey) {
+        forwardMethod(target, propertyKey, 'post', config);
+    };
 };
 exports.Head = function (config) {
-    forwardMethod('head', config);
+    return function (target, propertyKey) {
+        forwardMethod(target, propertyKey, 'head', config);
+    };
 };
 exports.Delete = function (config) {
-    forwardMethod('delete', config);
+    return function (target, propertyKey) {
+        forwardMethod(target, propertyKey, 'delete', config);
+    };
 };
 exports.Put = function (config) {
-    forwardMethod('put', config);
+    return function (target, propertyKey) {
+        forwardMethod(target, propertyKey, 'put', config);
+    };
 };

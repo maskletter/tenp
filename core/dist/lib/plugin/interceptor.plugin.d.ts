@@ -6,7 +6,7 @@ export default class InterceptorPlugin implements Plugin {
     private globalInterceptor;
     private routerInterceptor;
     onTenp(config: StartInterface): void;
-    onRouter(routerConfig: RouterConfig, parentConfig: RouterConfig): void;
+    onRouter($class: any, routerConfig: RouterConfig, parentConfig: RouterConfig): void;
     onInit(pathConfig: PathConfig): void;
     onAfter(pathConfig: PathConfig, config: StartInterface, request: Request, response: Response): Promise<any>;
 }

@@ -7,6 +7,6 @@ export default class UrlPlugin {
     private baseUrl;
     private routerUrl;
     onTenp(config: StartInterface): void;
-    onRouter(routerConfig: RouterConfig, parentConfig: RouterConfig, config: StartInterface): void;
+    onRouter($class: any, routerConfig: RouterConfig, parentConfig: RouterConfig, config: StartInterface): void;
     onInit(pathConfig: PathConfig): void;
 }

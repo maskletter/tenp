@@ -22,9 +22,9 @@ export const Router: (config?: RouterConfig) => any = (config: RouterConfig = {}
 		if(config.router){
 			config.router.forEach((Class: any) => {
 				if(Class.data){
-					Class.class.$$parentId = key;	
+					Class.class.prototype.$$parentId = key;	
 				}else{
-					Class.$$parentId = key;	
+					Class.prototype.$$parentId = key;	
 				}
 				
 			})
@@ -39,7 +39,7 @@ export const Router: (config?: RouterConfig) => any = (config: RouterConfig = {}
 			path: [...dbPathInfo]
 		};
 		dbPathInfo = [];
-		(target as any).$$id = target.prototype.$$id = key;
+		target.prototype.$$id = key;
 	}
 
 }
@@ -50,7 +50,6 @@ export const Config: (config: ConfigInterface) => any = (config: ConfigInterface
 
 	//The default is the get method
 	config.type || (config.type = 'get');
-	
 	//Append to the interface array
 	return (target: any, propertyKey: string) => {
 		dbPathInfo.push({
@@ -61,27 +60,38 @@ export const Config: (config: ConfigInterface) => any = (config: ConfigInterface
 	
 };
 
-function forwardMethod(method:string, config: any) {
+function forwardMethod(target: any, propertyKey: string,method:string, config: any) {
+
 	if(typeof(config) == 'string'){
-		Config({ type: method, url: config })	
+		Config({ type: method, url: config })(target, propertyKey)
 	}else{
-		Config({ type: method, ...config })
+		Config({ type: method, ...config })(target, propertyKey)
 	}
 }
 
 //Simplify request method
 export const Get: (config: string | GetInterface) => any = (config: string | GetInterface): any => {
-	forwardMethod('get',  config);
+	return (target: any, propertyKey: string) => {
+		forwardMethod(target, propertyKey, 'get',  config);
+	}
 }
 export const Post: (config: string | PostInterface) => any = (config: string | PostInterface): any => {
-	forwardMethod('post',  config);	
+	return (target: any, propertyKey: string) => {
+		forwardMethod(target, propertyKey, 'post',  config);	
+	}
 }
 export const Head: (config: string | HeadInterface) => any = (config: string | HeadInterface): any => {
-	forwardMethod('head',  config);
+	return (target: any, propertyKey: string) => {
+		forwardMethod(target, propertyKey, 'head',  config);
+	}
 }
 export const Delete: (config: string | DeleteInterface) => any = (config: string | DeleteInterface): any => {
-	forwardMethod('delete',  config);
+	return (target: any, propertyKey: string) => {
+		forwardMethod(target, propertyKey, 'delete',  config);
+	}
 }
 export const Put: (config: string | PutInterface) => any = (config: string | PutInterface): any => {
-	forwardMethod('put',  config);
+	return (target: any, propertyKey: string) => {
+		forwardMethod(target, propertyKey, 'put',  config);
+	}
 }

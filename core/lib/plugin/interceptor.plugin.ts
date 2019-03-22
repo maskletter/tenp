@@ -13,7 +13,7 @@ export default class InterceptorPlugin implements Plugin {
 		this.globalInterceptor = config.interceptor || [];
 	}
 
-	public onRouter(routerConfig: RouterConfig, parentConfig: RouterConfig): void {
+	public onRouter($class: any, routerConfig: RouterConfig, parentConfig: RouterConfig): void {
 		const interceptorType: string = routerConfig.interceptorType;
 		if(!interceptorType || interceptorType == 'inherit' || interceptorType == 'abandon-global'){
 			//Drop global interceptor, keep router interceptor

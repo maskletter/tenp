@@ -38,6 +38,10 @@ var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 var url_plugin_1 = require("./plugin/url.plugin");
 var interceptor_plugin_1 = require("./plugin/interceptor.plugin");
+var injector_plugin_1 = require("./plugin/injector.plugin");
+var receive_plugin_1 = require("./plugin/receive.plugin");
+var validator_plugin_1 = require("./plugin/validator.plugin");
+var common_plugin_1 = require("./plugin/common.plugin");
 var router_1 = require("./router");
 //Get the parent configuration
 exports.GetParentConfig = function (parentId) {
@@ -48,13 +52,13 @@ exports.GetParentConfig = function (parentId) {
         return {};
     }
 };
-//Initialize the tenp event
-exports.InitTenpEvent = function (config) { return __awaiter(_this, void 0, void 0, function () {
+//Initialize the tenp event(plugin)
+exports.InitPluginTenpEvent = function (config) { return __awaiter(_this, void 0, void 0, function () {
     var pluginMap, pluginS, _i, pluginMap_1, Plugin_1, plugin, _a;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
-                pluginMap = [url_plugin_1.default, interceptor_plugin_1.default].concat((config.plugin || []));
+                pluginMap = [common_plugin_1.default, url_plugin_1.default, interceptor_plugin_1.default, injector_plugin_1.default, receive_plugin_1.default, validator_plugin_1.default].concat((config.plugin || []));
                 pluginS = [];
                 _i = 0, pluginMap_1 = pluginMap;
                 _b.label = 1;
@@ -79,8 +83,8 @@ exports.InitTenpEvent = function (config) { return __awaiter(_this, void 0, void
         }
     });
 }); };
-//Initialize routing events
-exports.InitRouterEvent = function (config, routerConfig, parentConfig) { return __awaiter(_this, void 0, void 0, function () {
+//Initialize routing events(plugin)
+exports.InitPluginRouterEvent = function (config, $class, routerConfig, parentConfig) { return __awaiter(_this, void 0, void 0, function () {
     var _i, _a, plugin, _b;
     return __generator(this, function (_c) {
         switch (_c.label) {
@@ -92,7 +96,7 @@ exports.InitRouterEvent = function (config, routerConfig, parentConfig) { return
                 plugin = _a[_i];
                 _b = plugin.onRouter;
                 if (!_b) return [3 /*break*/, 3];
-                return [4 /*yield*/, plugin.onRouter(routerConfig, parentConfig, config)];
+                return [4 /*yield*/, plugin.onRouter($class, routerConfig, parentConfig, config)];
             case 2:
                 _b = (_c.sent());
                 _c.label = 3;
@@ -106,8 +110,8 @@ exports.InitRouterEvent = function (config, routerConfig, parentConfig) { return
         }
     });
 }); };
-//Initialize interface events
-exports.InitInterfaceEvent = function (pathConfig, config) { return __awaiter(_this, void 0, void 0, function () {
+//Initialize interface events(plugin)
+exports.InitPluginInterfaceEvent = function (pathConfig, config) { return __awaiter(_this, void 0, void 0, function () {
     var _i, _a, plugin, _b;
     return __generator(this, function (_c) {
         switch (_c.label) {
@@ -133,7 +137,8 @@ exports.InitInterfaceEvent = function (pathConfig, config) { return __awaiter(_t
         }
     });
 }); };
-exports.AfterInterfaceEvent = function (pathConfig, config, request, response) { return __awaiter(_this, void 0, void 0, function () {
+//(plugin)
+exports.AfterPluginInterfaceEvent = function (pathConfig, config, request, response) { return __awaiter(_this, void 0, void 0, function () {
     var _i, _a, plugin, result;
     return __generator(this, function (_b) {
         switch (_b.label) {

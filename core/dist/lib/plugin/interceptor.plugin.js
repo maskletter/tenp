@@ -46,7 +46,7 @@ var InterceptorPlugin = /** @class */ (function () {
     InterceptorPlugin.prototype.onTenp = function (config) {
         this.globalInterceptor = config.interceptor || [];
     };
-    InterceptorPlugin.prototype.onRouter = function (routerConfig, parentConfig) {
+    InterceptorPlugin.prototype.onRouter = function ($class, routerConfig, parentConfig) {
         var interceptorType = routerConfig.interceptorType;
         if (!interceptorType || interceptorType == 'inherit' || interceptorType == 'abandon-global') {
             //Drop global interceptor, keep router interceptor

@@ -44,6 +44,9 @@ var event_1 = require("./event");
 //Create an express service
 function createExpressServer(config) {
     var app = express_1.default({});
+    if (config.static) {
+        app.use(express_1.serveStatic(config.static));
+    }
     var httpServer = http.createServer(app).listen(config.port);
     if (config.https) {
         var httpsServer = https.createServer(config.https, app).listen(config.port);
@@ -53,37 +56,45 @@ function createExpressServer(config) {
 //Create an router service
 function createRouterServer(config, routerMap, app) {
     return __awaiter(this, void 0, void 0, function () {
-        var _i, routerMap_1, Class, Router, classInfo, $class;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var _i, routerMap_1, Class, Router, classInfo, $class, _a;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
                     _i = 0, routerMap_1 = routerMap;
-                    _a.label = 1;
+                    _b.label = 1;
                 case 1:
-                    if (!(_i < routerMap_1.length)) return [3 /*break*/, 6];
+                    if (!(_i < routerMap_1.length)) return [3 /*break*/, 8];
                     Class = routerMap_1[_i];
                     Router = Class.class ? Class.class : Class;
-                    classInfo = router_1.dbRouterInfo[Router.$$id];
+                    classInfo = router_1.dbRouterInfo[Router.prototype.$$id];
                     $class = new classInfo.functoin();
                     //Run the router initialization event
-                    return [4 /*yield*/, event_1.InitRouterEvent(config, classInfo.config, event_1.GetParentConfig(Router.$$parentId))];
+                    return [4 /*yield*/, event_1.InitPluginRouterEvent(config, $class, classInfo.config, event_1.GetParentConfig(Router.prototype.$$parentId))];
                 case 2:
                     //Run the router initialization event
-                    _a.sent();
+                    _b.sent();
+                    _a = $class.onInit;
+                    if (!_a) return [3 /*break*/, 4];
+                    return [4 /*yield*/, $class.onInit()];
+                case 3:
+                    _a = (_b.sent());
+                    _b.label = 4;
+                case 4:
+                    _a;
                     //Run createInterfaceServer
                     return [4 /*yield*/, createInterfaceServer(config, classInfo, $class, app)];
-                case 3:
-                    //Run createInterfaceServer
-                    _a.sent();
-                    if (!classInfo.config.router) return [3 /*break*/, 5];
-                    return [4 /*yield*/, createRouterServer(config, classInfo.config.router, app)];
-                case 4:
-                    _a.sent();
-                    _a.label = 5;
                 case 5:
+                    //Run createInterfaceServer
+                    _b.sent();
+                    if (!classInfo.config.router) return [3 /*break*/, 7];
+                    return [4 /*yield*/, createRouterServer(config, classInfo.config.router, app)];
+                case 6:
+                    _b.sent();
+                    _b.label = 7;
+                case 7:
                     _i++;
                     return [3 /*break*/, 1];
-                case 6: return [2 /*return*/];
+                case 8: return [2 /*return*/];
             }
         });
     });
@@ -98,7 +109,7 @@ function createInterfaceServer(config, classInfo, $class, app) {
             pathMap.forEach(function (data) { return __awaiter(_this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, event_1.InitInterfaceEvent(data.config, config)];
+                        case 0: return [4 /*yield*/, event_1.InitPluginInterfaceEvent(data.config, config)];
                         case 1:
                             _a.sent();
                             //Register for an express interface event
@@ -107,7 +118,7 @@ function createInterfaceServer(config, classInfo, $class, app) {
                                     var result;
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
-                                            case 0: return [4 /*yield*/, event_1.AfterInterfaceEvent(data.config, config, request, response)];
+                                            case 0: return [4 /*yield*/, event_1.AfterPluginInterfaceEvent(data.config, config, request, response)];
                                             case 1:
                                                 result = _a.sent();
                                                 if (result != false) {
@@ -134,11 +145,12 @@ exports.default = (function (config, app) { return __awaiter(_this, void 0, void
                 if (!app) {
                     app = createExpressServer(config);
                 }
+                config.express && config.express(app);
                 _a = config;
-                return [4 /*yield*/, event_1.InitTenpEvent(config)];
+                return [4 /*yield*/, event_1.InitPluginTenpEvent(config)];
             case 1:
                 _a.plugin = _b.sent();
-                return [4 /*yield*/, createRouterServer(config, config.router, app)];
+                return [4 /*yield*/, createRouterServer(config, (config.router || []), app)];
             case 2:
                 _b.sent();
                 return [2 /*return*/, app];

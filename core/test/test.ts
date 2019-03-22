@@ -14,7 +14,7 @@ import * as assert from 'assert';
 process.stdout.write(process.platform === 'win32' ? '\x1Bc' : '\x1B[2J\x1B[3J\x1B[H')
 
 const interceptor = (req: Request, res: Response): void => {
-  // console.log('经过了hello路由')
+  // console.log('经过了hello路由' )
 }
 
 @Router({ url: '/second' })

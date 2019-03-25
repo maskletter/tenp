@@ -100,7 +100,9 @@ Based on the `express` implementation, using `typescript` enhancements, creating
 
 
 </table>
+
 <br>
+
 #### Installed via npm
 ```bash
 $ npm install @tenp/cli -g

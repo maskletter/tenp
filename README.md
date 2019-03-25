@@ -7,7 +7,7 @@
 
 <br>
 
-基于 `express` ，兼容 `express` 所有方法及中间件，两者可并行使用，使用 `typescript` 实现，内置pm2基础服务调用。
+Based on the `express` implementation, using `typescript` enhancements, creating services via `pm2`
 
 <a href="https://badge.fury.io/js/%40tenp%2Fcore" title="NPM Version Badge" rel="nofollow">
    <img src="https://badge.fury.io/js/%40tenp%2Fcore.svg" height="18">

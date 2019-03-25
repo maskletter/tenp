@@ -100,9 +100,7 @@ Based on the `express` implementation, using `typescript` enhancements, creating
 
 
 </table>
-
 <br>
-
 #### Installed via npm
 ```bash
 $ npm install @tenp/cli -g
@@ -117,21 +115,28 @@ $ tenp dev
 #### Create service
 ```typescript
 
-import tenp from '@tenp/core';
-import { Main ,Router, config, ValidationDone } from '@tenp/core';
-@Router({}) 
+import { Application } from 'express'
+import { Start ,Router, Config, Get, Request, Response } from '@tenp/core';
+@Router() 
 class HelloWord{
 
 	private msg: string = 'Hello, world'
 
 	@config({ url: '/hello', name: 'hello', type: 'get' })
-	private hello(req: tenp.Request, res: tenp.Response): void {
+	private hello(req: Request, res: Response): void {
+		res.end(`<h1>${this.msg}</h1>`)
+	}
+	
+	@Get('/world')
+	private world(req: Request, res: Response): void {
 		res.end(`<h1>${this.msg}</h1>`)
 	}
 
 }
-Main({
+Start({
 	port: 8080,
 	router: [ HelloWord ],
+}).then((app: Application) => {
+	console.log('success')
 })
 ```

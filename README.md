@@ -7,7 +7,7 @@
 
 <br>
 
-基于 `express` ，兼容 `express` 所有方法及中间件，两者可并行使用，使用 `typescript` 实现，内置pm2基础服务调用。
+Based on the `express` implementation, using `typescript` enhancements, creating services via `pm2`
 
 <a href="https://badge.fury.io/js/%40tenp%2Fcore" title="NPM Version Badge" rel="nofollow">
    <img src="https://badge.fury.io/js/%40tenp%2Fcore.svg" height="18">
@@ -28,85 +28,73 @@
    <img src="https://api.codeclimate.com/v1/badges/53669772f0a4dac97bd7/maintainability" />
 </a>
 
-👉👉👉[项目文档](https://tenp.maskletter.com/dist/)
-👉👉👉[演示项目链接](https://github.com/maskletter/tenp-demo)
+👉👉👉[API Docs](https://tenp.maskletter.com/dist/)
 <br>
 
 ---
 
- * [Express(底层框架)](https://github.com/expressjs/express)
- * [Typescript(开发语言)](http://www.typescriptlang.org/)
- * [pm2(服务)](https://github.com/Unitech/pm2)
+ * [Express](https://github.com/expressjs/express)
+ * [Typescript](http://www.typescriptlang.org/)
+ * [pm2](https://github.com/Unitech/pm2)
  --- 
- * [router(路由功能)](https://tenp.maskletter.com/dist/use.html#router)
- * [interceptor拦截器(用于进行请求拦截)](https://tenp.maskletter.com/dist/tenp-plugin.html#interceptor-拦截器)
- * [Validation验证器(用于数据验证)](https://tenp.maskletter.com/dist/tenp-plugin.html#validator-数据验证器)
+ * [router](https://tenp.maskletter.com/dist/use.html#router)
+ * [interceptor](https://tenp.maskletter.com/dist/tenp-plugin.html#interceptor-拦截器)
+ * [validator](https://tenp.maskletter.com/dist/tenp-plugin.html#validator-数据验证器)
 
 
 
 
 <br />
 
-#### 框架进度
+#### Framework progress
 
 <table>	
 	<thead>
 		<tr>
-			<td align="center" width="20%">功能</td>
-			<td align="center" width="40%">状态</td>
-			<td align="center">说明</td>
+			<td align="center" width="50%">功能</td>
+			<td align="center" width="50%">状态</td>
 		</tr>
 	</thead>
 	<tbody>
 		<tr>
 			<td align="center">express</td>
-			<td align="center">已完成</td>
-			<td align="center">以express为基础</td>
+			<td align="center">completed</td>
 		</tr>
 		<tr>
 			<td align="center">typescript</td>
-			<td align="center">已完成</td>
-			<td align="center">完整的ts配置，实现开发环境监听代码自动重启服务</td>
+			<td align="center">completed</td>
 		</tr>
 		<tr>
 			<td align="center">router</td>
-			<td align="center">已完成</td>
-			<td align="center">模块化路由功能</td>
+			<td align="center">completed</td>
 		</tr>
 		<tr>
 			<td align="center">interceptor</td>
-			<td align="center">已完成</td>
-			<td align="center">拦截器</td>
+			<td align="center">completed</td>
 		</tr>
 		<tr>
 			<td align="center">validation</td>
-			<td align="center">待完善</td>
-			<td align="center">数据验证器</td>
+			<td align="center">perfect</td>
 		</tr>
 		<tr>
 			<td align="center">Api interface</td>
-			<td align="center">未开始</td>
-			<td align="center">创建api文档</td>
+			<td align="center">undefined</td>
 		</tr>
 		<tr>
 			<td align="center">pm2</td>
-			<td align="center">已完成</td>
-			<td align="center">利用pm2官方api，实现简单的pm2服务</td>
+			<td align="center">completed</td>
 		</tr>
 		<tr>
 			<td align="center">throw</td>
-			<td align="center">已完成</td>
-			<td align="center">接口异常处理</td>
+			<td align="center">completed</td>
 		</tr>
 		<tr>
 			<td align="center">cli</td>
-			<td align="center">已完成,待优化</td>
-			<td align="center">基于node的cmd命令行工具</td>
+			<td align="center">completed,optimization</td>
 		</tr>
 		<tr>
-			<td align="center">环境配置</td>
-			<td align="center">已完成</td>
-			<td align="center">自定义环境变量</td>
+			<td align="center">surroundings</td>
+			<td align="center">completed</td>
 		</tr>
 	</tbody>
 
@@ -115,7 +103,7 @@
 
 <br>
 
-通过Npm 方式安装kvl，并创建服务运行
+#### Installed via npm
 ```bash
 $ npm install @tenp/cli -g
 $ tenp init hellworld
@@ -126,24 +114,31 @@ $ tenp dev
 
 
 
-#### 基础方式使用
+#### Create service
 ```typescript
 
-import tenp from '@tenp/core';
-import { Main ,Router, config, ValidationDone } from '@tenp/core';
-@Router({}) 
+import { Application } from 'express'
+import { Start ,Router, Config, Get, Request, Response } from '@tenp/core';
+@Router() 
 class HelloWord{
 
 	private msg: string = 'Hello, world'
 
 	@config({ url: '/hello', name: 'hello', type: 'get' })
-	private hello(req: tenp.Request, res: tenp.Response): void {
+	private hello(req: Request, res: Response): void {
+		res.end(`<h1>${this.msg}</h1>`)
+	}
+	
+	@Get('/world')
+	private world(req: Request, res: Response): void {
 		res.end(`<h1>${this.msg}</h1>`)
 	}
 
 }
-Main({
+Start({
 	port: 8080,
 	router: [ HelloWord ],
+}).then((app: Application) => {
+	console.log('success')
 })
 ```

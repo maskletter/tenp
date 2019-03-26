@@ -1,7 +1,9 @@
 
 import { expect } from 'chai';
 import 'mocha';
-import tenp, { Main, Router, config, inject } from '..'
+import { Start, Request, dbRouterInfo, RouterInfo, Response, Injector, 
+  Get, Post, Delete, Put, Head,
+  Router, Config, RouterComponent, Validator, ValidatorError } from '../'
 import { objectToBoolean } from './tool'
 import * as express from 'express'
 import * as http from 'http'
@@ -11,15 +13,15 @@ import * as assert from 'assert';
 
 process.stdout.write(process.platform === 'win32' ? '\x1Bc' : '\x1B[2J\x1B[3J\x1B[H')
 
-const interceptor = (req: tenp.Request, res: tenp.Response): void => {
-  console.log('经过了hello路由')
+const interceptor = (req: Request, res: Response): void => {
+  // console.log('经过了hello路由' )
 }
 
 @Router({ url: '/second' })
-class SecondRouter extends tenp {
+class SecondRouter extends RouterComponent {
 
-  @config({ url: '/interceptor', type: 'get', name: '测试路由', interceptorLevel: 3, validation: { phone: { type: 'phone' } }, validType: 'query', getData(){} })
-  private testInterceptor(req: tenp.Request, res: tenp.Response): void {
+  @Config({ url: '/interceptor', type: 'get', name: '测试路由', interceptorType: 'abandon', validator: { phone: { type: 'phone' } }, validatorType: 'query'  })
+  private testInterceptor(req: Request, res: Response): void {
     res.send('hello, world')
   }
 
@@ -28,141 +30,128 @@ class SecondRouter extends tenp {
 @Router({ 
   name: 'router-hello', 
   url: '/hello',
-  interceptor: interceptor,
-  interceptorLevel: 0,
+  interceptor: [interceptor],
+  interceptorType: 'inherit',
   router: [ SecondRouter ]
 })
-class HelloWorld extends tenp{
+class HelloWorld extends RouterComponent{
 
-  @config({ url: '/hello', type: 'get', name: '测试路由', interceptorLevel: 0, validation: { phone: { type: 'phone' } }, validType: 'query', getData(){} })
-  private getHello(req: tenp.Request, res: tenp.Response): void {
+  @Config({ url: '/hello', type: 'get', name: '测试路由', interceptorType: 'abandon', validator: { phone: { type: 'phone' } }, validatorType: 'query'  })
+  private getHello(req: Request, res: Response): void {
     res.send('hello, world')
   }
 
-  @config({ url: '/world', type: ['get','post','put','delete','head'], name: '测试路由2', interceptorLevel: 0, validation: { phone: { type: 'phone' } }, validType: 'query', getData(){} })
-  private getWorld(req: tenp.Request, res: tenp.Response): void {
+  @Config({ url: '/world', type: 'get', name: '测试路由2', interceptorType: 'abandon', validator: { phone: { type: 'phone' } }, validatorType: 'query' })
+  private getWorld(req: Request, res: Response): void {
     res.send('hello, world')
   }
+
+
+  @Config({ url: '/world3', type: 'get', name: '测试路由3', validator: { phone: { type: 'phone' } }, validatorType: 'query' })
+  private getWorld2(req: Request, res: Response): void {
+    res.send('hello, world')
+  }
+
+
 }
 
-describe('初始化服务', () => {
+describe('初始化服务', async () => {
   it('创建tenp实例', async () => {
-    var $tenp = await Main({ 
+    var $tenp = await Start({ 
       port: 3687, 
     })
-    expect(objectToBoolean($tenp)).to.be.deep.equal({ app: true, httpServer: true })
   });
 
   it('创建tenp实例(注入外部express实例)', async () => {
     const app: any = express();
     const server = http.createServer(app).listen(8080);
-    var $tenp = await Main({ 
+    var $tenp = await Start({ 
       port: 3688, 
       express(private_app: express.Application){
         assert(private_app == app)
       },
     }, app)
-    expect(objectToBoolean($tenp)).to.be.deep.equal({ app: true })
-    // expect(objectToBoolean($tenp)).to.include.keys('app');
   });
 
 
 });
 
-describe('路由模块', () => {
+describe('路由模块', async () => {
+  const routerInfo: RouterInfo = dbRouterInfo[HelloWorld.prototype.$$id];
   it("检查router", () => {
-
-
-    const $router: any = new HelloWorld();
-    expect($router.$$config).to.be.a('object');
-    expect($router.$$config).to.be.deep.equal({
-      name: 'router-hello', 
-      url: '/hello',
-      interceptor: [ interceptor ],
-      interceptorLevel: 0,
-      provide_instancep: {},
-      router: [ SecondRouter ]
+    expect(objectToBoolean(Object.assign({},routerInfo))).to.be.deep.equal({ 
+        id: true, 
+        name: true, 
+        config: true, 
+        functoin: true, 
+        path: true 
     })
+    expect(objectToBoolean(Object.assign({}, routerInfo.config))).to.be.deep.equal({ 
+        name: true,
+        url: true,
+        interceptor: true,
+        interceptorType: true,
+        router: true 
+    })
+    
     
   })
 
   it('检查config', () => {
-    const $router: any = new HelloWorld();
-    assert(typeof $router.getHello === 'function')
-    expect($router.$$childConfig).to.be.a('array')
-    delete $router.$$childConfig[0].process
-    delete $router.$$childConfig[0].getData
-    expect($router.$$childConfig[0]).to.be.deep.equal({
-      method: ['get'],
-      url: '/hello',
-      name: '测试路由',
-      validation: { phone: { type: 'phone' } },
-      validType: 'query',
-      interceptorLevel: 0
+    expect(routerInfo.path.length).to.be.deep.equal(3);
+    expect(routerInfo.path[1].config).to.be.deep.equal({ 
+        url: '/world',
+        type: 'get',
+        name: '测试路由2',
+        interceptorType: 'abandon',
+        validator: { phone: { type: 'phone' } },
+        validatorType: 'query' 
     })
+    assert(typeof routerInfo.path[0].callback === 'function')
   })
 
 })
 
-describe('插件模块', () => {
+describe('插件模块', async () => {
 
   it('拦截器', (done: Function) => {
-    Main({ 
+    Start({ 
       port: 3691, 
       baseUrl: '/inter',
-      interceptor: function global(){
+      interceptor: [function global(){
         done()
-      },
+      }],
       router: [ HelloWorld ],
     }).then(result => {
-      const Forward = require('../lib/router').Forward;
-      Forward.apply({
-        req: {},
-        status(status: number){
-          return this;
-        },
-        json(result: any){
-          // console.log(result)
-        },
-        send: function(result: any){
-          // console.log(result)
-        }
-      }, ['/inter/hello/second/interceptor', { query: { 'phone': '13146595984' } }])
+      http.get('http://localhost:3691/inter/hello/world3?phone=13654777775', (res: http.IncomingMessage) => {
+        // console.log(res)
+      })
     })
 
   })
 
-  it('数据验证器', () => {
+  it('数据验证器', (done: Function) => {
 
-      const validation1: tenp.Validation = {
+      const validation1: Validator = {
         phone: {
           type: 'phone',
           name: '手机号',
-          required: true
+          required: true,
+          message: {
+            type: '手机类型不正确'
+          }
         },
         name: {
           type: 'string',
           required: false
         },
-        done(err: tenp.ValidationError){
-          console.log(`${err.name}验证不通过`)
+        done(err: ValidatorError){
+          done();
         }
       }
 
-      const Validator = require('../lib/plugin/validator.plugin')
-      const $valid = new Validator();
-
-      $valid.main({
-        //模拟request
-        query: { phone: '13146595984' }
-      }, {
-        //模拟response
-        json(){}
-      }, {
-        //模拟@config配置
-        method: 'get',
-        validation: validation1
-      })
+      const validator = new (require('../dist/lib/plugin/validator.plugin').default as any)
+      validator.validator({ phone: '13*654777775' }, validation1)
 
   })
 
@@ -173,13 +162,13 @@ describe('插件模块', () => {
       public name: string = '测试注入器'
     }
     @Router({})
-    class TestRouter extends tenp{
-      @inject('test-injectable') public test: TestInjectable;
+    class TestRouter extends RouterComponent {
+      @Injector('test-injectable') public test: TestInjectable;
       onInit(){
         expect(this.test).to.be.an.instanceof(TestInjectable);
       }
     }
-    Main({ 
+    Start({ 
       port: 3689, 
       router: [ TestRouter ],
       provide: [ { class: TestInjectable, name: 'test-injectable' } ]
@@ -191,31 +180,31 @@ describe('插件模块', () => {
 
 
 describe('接口请求', () => {
-  Main({ 
+
+  @Router()
+  class TestRouter{
+    @Get('/test')
+    private dawdget1(request: Request, response: Response): void {
+      response.end('success')
+    }
+  }
+
+  Start({ 
     port: 3690, 
-    router: [ HelloWorld ],
+    router: [ TestRouter ],
+  }).then(result => {
+  
   })
-  it('get测试',  () => {
-    routerSim('post', '/hello/world');
-  })
-  it('post测试',  () => {
-    routerSim('post', '/hello/world');
-  })
-  it('put测试',  () => {
-    routerSim('put', '/hello/world');
-  })
-  it('delete测试',  () => {
-    routerSim('delete', '/hello/world');
-  })
-  it('head测试',  () => {
-    routerSim('head', '/hello/world');
+  it('get测试',  (done: Function) => {
+    routerSim('get', '/test', done);
   })
 })
 
 
 
-function routerSim(method: string, url: string){
-  const allInterface = require('../lib/router').RouterUrl;
-  expect(allInterface[url]).to.be.a('object');
-  assert(allInterface[url].method.indexOf(method) != -1)
+async function routerSim(method: string, url: string, done: Function){
+  const req = http.request({ method: method, port: 3690 , path: url }, (res: any) => {
+    done();
+  })
+  req.end();
 }

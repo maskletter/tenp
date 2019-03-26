@@ -140,7 +140,6 @@ module.exports = function(argv){
 				pacakge.dependencies = {
 					"formidable": "^1.2.1",
 					"express": "^4.16.4",
-					"typescript": "^3.2.2",
 		    		"@tenp/core": "^"+Global_Pack.version
 				}
 			}

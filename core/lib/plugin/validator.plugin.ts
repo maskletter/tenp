@@ -86,7 +86,7 @@ export interface Validator{
 			regular?: string
 			type?: string
 		}
-	} | Function
+	} | Function | undefined
 
 	done?(data?: ValidatorError, request?: Request, response?: Response): void
 

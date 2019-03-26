@@ -86,9 +86,7 @@ tsWatch(function(){
     
 }, err => {
     const text = ts.flattenDiagnosticMessageText(err.messageText, formatHost.getNewLine());
-    if(packConfig.tenp.notice != false){
-      sendSystemMessage('typescript编译出错', text);
-    }
+    con.error(`  Error ${text}`)
 });
 
 /*---------------------------全局错误监听---------------------------------*/
@@ -112,7 +110,8 @@ function closeNode(){
 /*---------------------------监听ts文件---------------------------------*/
 function tsWatch(process_server, error){
 
-  var configPath = ts.findConfigFile(
+    let CompileError = false;
+    var configPath = ts.findConfigFile(
 
     /*searchPath*/ "./", ts.sys.fileExists, "tsconfig.json");
     if (!configPath) {
@@ -127,6 +126,7 @@ function tsWatch(process_server, error){
     host.createProgram = function (rootNames, options, host, oldProgram) {
         process.stdout.write(process.platform === 'win32' ? '\x1Bc' : '\x1B[2J\x1B[3J\x1B[H')
         console.log("** 即将开始typescript文件监听! **");
+        CompileError = false;
         return origCreateProgram(rootNames, options, host, oldProgram);
     };
 
@@ -147,7 +147,7 @@ function tsWatch(process_server, error){
     ts.createWatchProgram(host);
 
     function reportDiagnostic(diagnostic, loaderOptions, colors, compiler, merge) {
-
+          CompileError = true;
          let message = ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n");
           if (diagnostic.file) {
             let { line, character } = diagnostic.file.getLineAndCharacterOfPosition(
@@ -162,14 +162,18 @@ function tsWatch(process_server, error){
           }
       
         error(diagnostic)
-        console.error("Error", diagnostic.code, ":", ts.flattenDiagnosticMessageText(diagnostic.messageText, formatHost.getNewLine()));
     }
     /**
      * Prints a diagnostic every time the watch status changes.
      * This is mainly for messages like "Starting compilation" or "Compilation completed".
      */
     function reportWatchStatusChanged(diagnostic) {
-        console.info(ts.formatDiagnostic(diagnostic, formatHost));
+        const error = ts.formatDiagnostic(diagnostic, formatHost);
+        con.yellow('\r\n '+error);
+        if(CompileError && packConfig.tenp.notice != false){
+          sendSystemMessage('Typescript compilation error', error);
+          CompileError = false;
+        }
     }
 
 }

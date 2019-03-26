@@ -1,10 +1,9 @@
-
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "declaration": false,
     "baseUrl": "src",
     "sourceMap": false,
-    "declaration": false,
     "noErrorTruncation": true,
     "allowJs": true,
     "moduleResolution": "node",
@@ -12,6 +11,7 @@
     "experimentalDecorators": true,
     "strict": true,
     "alwaysStrict": false,
+    "strictNullChecks": false,
     "noImplicitUseStrict": false,
     "noImplicitAny": true, 
     "allowSyntheticDefaultImports": false,

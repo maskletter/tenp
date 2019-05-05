@@ -1,7 +1,7 @@
 
-import { Plugin, PathConfig, StartInterface, Request, Response } from '../../d.ts/interface'
+import tenp from '../../interface'
 
-export default class ValidatorPlugin implements Plugin {
+export default class ValidatorPlugin implements tenp.Plugin {
 	
 	constructor() {
 		// code...
@@ -9,7 +9,7 @@ export default class ValidatorPlugin implements Plugin {
 
 	private globalDone: Function;
 
-	private defaultDone(data: ValidatorError, request: Request, response: Response): void {
+	private defaultDone(data: ValidatorError, request: tenp.Request, response: tenp.Response): void {
 		response.json(data)
 	}
 
@@ -18,7 +18,7 @@ export default class ValidatorPlugin implements Plugin {
 		email: /^[a-z0-9]+([._\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/
 	}
 
-	private validator(data: any, validator: Validator, request: Request, response: Response): boolean {
+	private validator(data: any, validator: Validator, request: tenp.Request, response: tenp.Response): boolean {
 		const done = validator.done ? validator.done : this.globalDone ? this.globalDone : this.defaultDone;
 		let result: boolean = false;
 		for(let name in validator){
@@ -54,11 +54,11 @@ export default class ValidatorPlugin implements Plugin {
 		return result;
 	}
 
-	private mininData(request: Request): Object{
+	private mininData(request: tenp.Request): Object{
 		return Object.assign({}, request.params, request.query, request.body)
 	}
 
-	public onAfter(pathConfig: PathConfig, config: StartInterface, request: Request, response: Response): any {
+	public onAfter(pathConfig: tenp.PathConfig, config: tenp.StartInterface, request: tenp.Request, response: tenp.Response): any {
 		if(!pathConfig.validator) return true;
 		let defaultType: string = pathConfig.validatorType || ((pathConfig as any).type=='post'?'body':'query');
 		let data = {};
@@ -91,6 +91,7 @@ export interface Validator{
 	done?(data?: ValidatorError, request?: Request, response?: Response): void
 
 }
+
 
 export interface ValidatorError{
 	name: string 

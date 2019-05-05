@@ -1,19 +1,15 @@
 
 import * as crypto from 'crypto';
 import { 
-	RouterConfig, 
-	ConfigInterface, 
-	RouterInfo,
-	PathInfo, 
-	NewFunction, 
-	GetInterface, PostInterface, DeleteInterface, PutInterface, HeadInterface } from '../d.ts/interface'
+	NewFunction } from '../interface'
+import tenp from '../interface'
 
 //Store routing information
-export let dbRouterInfo: { [prop: string]: RouterInfo } = {};
-export let dbPathInfo: PathInfo[] = [];
+export let dbRouterInfo: { [prop: string]: tenp.RouterInfo } = {};
+export let dbPathInfo: tenp.PathInfo[] = [];
 
 //Routing entry
-export const Router: (config?: RouterConfig) => any = (config: RouterConfig = {}): any => {
+export const Router: (config?: tenp.RouterConfig) => any = (config: tenp.RouterConfig = {}): any => {
 
 	return (target: NewFunction) => {
 		const key: string = crypto.createHash('md5').update(Math.random()+target.name).digest('hex');
@@ -46,7 +42,7 @@ export const Router: (config?: RouterConfig) => any = (config: RouterConfig = {}
 
 
 //Interface entry
-export const Config: (config: ConfigInterface) => any = (config: ConfigInterface): any => {
+export const Config: (config: tenp.ConfigInterface) => any = (config: tenp.ConfigInterface): any => {
 
 	//The default is the get method
 	config.type || (config.type = 'get');
@@ -70,27 +66,27 @@ function forwardMethod(target: any, propertyKey: string,method:string, config: a
 }
 
 //Simplify request method
-export const Get: (config: string | GetInterface) => any = (config: string | GetInterface): any => {
+export const Get: (config: string | tenp.GetInterface) => any = (config: string | tenp.GetInterface): any => {
 	return (target: any, propertyKey: string) => {
 		forwardMethod(target, propertyKey, 'get',  config);
 	}
 }
-export const Post: (config: string | PostInterface) => any = (config: string | PostInterface): any => {
+export const Post: (config: string | tenp.PostInterface) => any = (config: string | tenp.PostInterface): any => {
 	return (target: any, propertyKey: string) => {
 		forwardMethod(target, propertyKey, 'post',  config);	
 	}
 }
-export const Head: (config: string | HeadInterface) => any = (config: string | HeadInterface): any => {
+export const Head: (config: string | tenp.HeadInterface) => any = (config: string | tenp.HeadInterface): any => {
 	return (target: any, propertyKey: string) => {
 		forwardMethod(target, propertyKey, 'head',  config);
 	}
 }
-export const Delete: (config: string | DeleteInterface) => any = (config: string | DeleteInterface): any => {
+export const Delete: (config: string | tenp.DeleteInterface) => any = (config: string | tenp.DeleteInterface): any => {
 	return (target: any, propertyKey: string) => {
 		forwardMethod(target, propertyKey, 'delete',  config);
 	}
 }
-export const Put: (config: string | PutInterface) => any = (config: string | PutInterface): any => {
+export const Put: (config: string | tenp.PutInterface) => any = (config: string | tenp.PutInterface): any => {
 	return (target: any, propertyKey: string) => {
 		forwardMethod(target, propertyKey, 'put',  config);
 	}

@@ -1,5 +1,5 @@
 
-import { StartInterface, RouterConfig, PathConfig } from '../../d.ts/interface'
+import tenp from '../../interface'
 
 /**
  * Used to implement path inheritance between routers
@@ -18,7 +18,7 @@ export default class UrlPlugin  {
 	private routerUrl: string = '';
 
 	//Triggered when tenp is initialized
-	public onTenp(config: StartInterface): void {
+	public onTenp(config: tenp.StartInterface): void {
 		// console.log(config)
 		if(config.baseUrl){
 			this.baseUrl = config.baseUrl;
@@ -27,12 +27,12 @@ export default class UrlPlugin  {
 	}
 
 	//Triggered when the router initializes
-	public onRouter($class: any, routerConfig: RouterConfig, parentConfig: RouterConfig, config: StartInterface): void {
+	public onRouter($class: any, routerConfig: tenp.RouterConfig, parentConfig: tenp.RouterConfig, config: tenp.StartInterface): void {
 		this.routerUrl = routerConfig.url = (parentConfig.url||'')+(routerConfig.url||'');
 	}
 
 	//Trigger when interface is initialized
-	public onInit(pathConfig: PathConfig): void {
+	public onInit(pathConfig: tenp.PathConfig): void {
 		pathConfig.url = this.baseUrl + this.routerUrl + pathConfig.url
 	}
 

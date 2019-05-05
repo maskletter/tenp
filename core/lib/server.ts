@@ -4,12 +4,11 @@ import * as http from 'http';
 import express, { serveStatic } from './express';
 import { Application, Response, Request } from 'express'
 import { dbRouterInfo } from './router'
-import { StartInterface, RouterInfo, NewFunction, PathInfo } from '../d.ts/interface'
+import tenp, {  NewFunction } from '../interface'
 import { InitPluginTenpEvent, InitPluginRouterEvent, GetParentConfig, InitPluginInterfaceEvent, AfterPluginInterfaceEvent } from './event'
-import InterceptorPlugin from './plugin/interceptor.plugin'
 
 //Create an express service
-function createExpressServer(config: StartInterface): any{
+function createExpressServer(config: tenp.StartInterface): any{
 	const app = express({});
 	if(config.static){
 		app.use(serveStatic(config.static))
@@ -22,7 +21,7 @@ function createExpressServer(config: StartInterface): any{
 }
 
 //Create an router service
-async function createRouterServer(config: StartInterface, routerMap: NewFunction[], app: Application){
+async function createRouterServer(config: tenp.StartInterface, routerMap: NewFunction[], app: Application){
 
 	for(let Class of routerMap){
 		const Router = (Class as any).class ? (Class as any).class : Class;
@@ -41,12 +40,12 @@ async function createRouterServer(config: StartInterface, routerMap: NewFunction
 }
 
 //Create an interface service
-async function createInterfaceServer(config: StartInterface, classInfo: RouterInfo, $class: Function, app: any): Promise<any> {
- 	const pathMap: PathInfo[] = classInfo.path || [];
- 	pathMap.forEach(async (data: PathInfo) => {
+async function createInterfaceServer(config: tenp.StartInterface, classInfo: tenp.RouterInfo, $class: Function, app: any): Promise<any> {
+ 	const pathMap: tenp.PathInfo[] = classInfo.path || [];
+ 	pathMap.forEach(async (data: tenp.PathInfo) => {
  		await InitPluginInterfaceEvent(data.config, config);
  		//Register for an express interface event
- 		app[data.config.type](data.config.url, async function(request: Request, response: Response){
+ 		app[data.config.type](data.config.url, async function(request: tenp.Request, response: tenp.Response){
  			const result = await AfterPluginInterfaceEvent(data.config, config, request, response);
  			if(result != false){
  				data.callback.apply($class,[request, response])
@@ -55,7 +54,7 @@ async function createInterfaceServer(config: StartInterface, classInfo: RouterIn
  	})
 }
 
-export default async (config: StartInterface, app?: Application): Promise<any> => {
+export default async (config: tenp.StartInterface, app?: Application): Promise<any> => {
 
 	if(!app){
 		app = createExpressServer(config);

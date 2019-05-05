@@ -1,7 +1,7 @@
-import { Plugin, StartInterface } from '../../d.ts/interface';
-export default class CommonPlugin implements Plugin {
+import tenp from '../../interface';
+export default class CommonPlugin implements tenp.Plugin {
     private global;
-    onTenp(config: StartInterface): void;
+    onTenp(config: tenp.StartInterface): void;
     onRouter($class: any): void;
 }
 export declare const getGlobal: (name?: string) => any;

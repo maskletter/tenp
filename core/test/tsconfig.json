@@ -6,6 +6,7 @@
     "sourceMap": false,
     "declaration": false,
     "noErrorTruncation": true,
+    "strictNullChecks": false,
     "allowJs": true,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,

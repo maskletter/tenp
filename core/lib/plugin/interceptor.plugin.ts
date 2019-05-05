@@ -1,19 +1,19 @@
-import { Plugin, StartInterface, RouterConfig, PathConfig, Request, Response } from '../../d.ts/interface'
+import tenp from '../../interface'
 
 /**
  * Tenp interceptor implementation
  */
-export default class InterceptorPlugin implements Plugin {
+export default class InterceptorPlugin implements tenp.Plugin {
 
 	private globalInterceptor: Function[] = [];
 
 	private routerInterceptor: Function[] = [];
 
-	public onTenp(config: StartInterface): void {
+	public onTenp(config: tenp.StartInterface): void {
 		this.globalInterceptor = config.interceptor || [];
 	}
 
-	public onRouter($class: any, routerConfig: RouterConfig, parentConfig: RouterConfig): void {
+	public onRouter($class: any, routerConfig: tenp.RouterConfig, parentConfig: tenp.RouterConfig): void {
 		const interceptorType: string = routerConfig.interceptorType;
 		if(!interceptorType || interceptorType == 'inherit' || interceptorType == 'abandon-global'){
 			//Drop global interceptor, keep router interceptor
@@ -31,7 +31,7 @@ export default class InterceptorPlugin implements Plugin {
 		}
 	}
 
-	public onInit(pathConfig: PathConfig): void {
+	public onInit(pathConfig: tenp.PathConfig): void {
 		const interceptorType: string = pathConfig.interceptorType;
 		if(!interceptorType || interceptorType == 'inherit'){
 			//Inherit all interceptors
@@ -48,7 +48,7 @@ export default class InterceptorPlugin implements Plugin {
 		}
 	}
 
-	public async onAfter(pathConfig: PathConfig, config: StartInterface, request: Request, response: Response): Promise<any> {
+	public async onAfter(pathConfig: tenp.PathConfig, config: tenp.StartInterface, request: tenp.Request, response: tenp.Response): Promise<any> {
 		let result: boolean = true;
 		 for(let interceptor of pathConfig.interceptor){
 			const _res = await interceptor(request, response);

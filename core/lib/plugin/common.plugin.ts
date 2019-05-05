@@ -1,13 +1,13 @@
 
-import { Plugin, StartInterface } from '../../d.ts/interface'
+import tenp from '../../interface'
 
 let Save_Global_Variable: any = {};
 
-export default class CommonPlugin implements Plugin {
+export default class CommonPlugin implements tenp.Plugin {
 
 	private global: Object = {};
 
-	public onTenp(config: StartInterface): void{
+	public onTenp(config: tenp.StartInterface): void{
 		Save_Global_Variable = this.global = config.global;
 	}
 

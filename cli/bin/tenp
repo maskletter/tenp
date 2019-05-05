@@ -1,6 +1,12 @@
 #!/usr/bin/env node
 
 'use strict';
+/**
+ * Next
+ *    typescript
+ *    assemblyscript
+ *    senecajs 
+ */
 
 var pack = require('../package.json');
 const { execSync } = require('child_process')

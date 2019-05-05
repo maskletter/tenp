@@ -1,9 +1,10 @@
 
 import { expect } from 'chai';
 import 'mocha';
-import { Start, Request, dbRouterInfo, RouterInfo, Response, Injector, 
+import { Start, dbRouterInfo, Injector,
   Get, Post, Delete, Put, Head,
   Router, Config, RouterComponent, Validator, ValidatorError } from '../'
+import tenp from '../interface'
 import { objectToBoolean } from './tool'
 import * as express from 'express'
 import * as http from 'http'
@@ -13,7 +14,7 @@ import * as assert from 'assert';
 
 process.stdout.write(process.platform === 'win32' ? '\x1Bc' : '\x1B[2J\x1B[3J\x1B[H')
 
-const interceptor = (req: Request, res: Response): void => {
+const interceptor = (req: tenp.Request, res: tenp.Response): void => {
   // console.log('经过了hello路由' )
 }
 
@@ -21,7 +22,7 @@ const interceptor = (req: Request, res: Response): void => {
 class SecondRouter extends RouterComponent {
 
   @Config({ url: '/interceptor', type: 'get', name: '测试路由', interceptorType: 'abandon', validator: { phone: { type: 'phone' } }, validatorType: 'query'  })
-  private testInterceptor(req: Request, res: Response): void {
+  private testInterceptor(req: tenp.Request, res: tenp.Response): void {
     res.send('hello, world')
   }
 
@@ -37,18 +38,18 @@ class SecondRouter extends RouterComponent {
 class HelloWorld extends RouterComponent{
 
   @Config({ url: '/hello', type: 'get', name: '测试路由', interceptorType: 'abandon', validator: { phone: { type: 'phone' } }, validatorType: 'query'  })
-  private getHello(req: Request, res: Response): void {
+  private getHello(req: tenp.Request, res: tenp.Response): void {
     res.send('hello, world')
   }
 
   @Config({ url: '/world', type: 'get', name: '测试路由2', interceptorType: 'abandon', validator: { phone: { type: 'phone' } }, validatorType: 'query' })
-  private getWorld(req: Request, res: Response): void {
+  private getWorld(req: tenp.Request, res: tenp.Response): void {
     res.send('hello, world')
   }
 
 
   @Config({ url: '/world3', type: 'get', name: '测试路由3', validator: { phone: { type: 'phone' } }, validatorType: 'query' })
-  private getWorld2(req: Request, res: Response): void {
+  private getWorld2(req: tenp.Request, res: tenp.Response): void {
     res.send('hello, world')
   }
 
@@ -77,7 +78,7 @@ describe('初始化服务', async () => {
 });
 
 describe('路由模块', async () => {
-  const routerInfo: RouterInfo = dbRouterInfo[HelloWorld.prototype.$$id];
+  const routerInfo: tenp.RouterInfo = dbRouterInfo[HelloWorld.prototype.$$id];
   it("检查router", () => {
     expect(objectToBoolean(Object.assign({},routerInfo))).to.be.deep.equal({ 
         id: true, 
@@ -184,7 +185,7 @@ describe('接口请求', () => {
   @Router()
   class TestRouter{
     @Get('/test')
-    private dawdget1(request: Request, response: Response): void {
+    private dawdget1(request: tenp.Request, response: tenp.Response): void {
       response.end('success')
     }
   }

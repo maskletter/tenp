@@ -1,12 +1,12 @@
-import { Plugin, PathConfig, StartInterface, Request, Response } from '../../d.ts/interface';
-export default class ValidatorPlugin implements Plugin {
+import tenp from '../../interface';
+export default class ValidatorPlugin implements tenp.Plugin {
     constructor();
     private globalDone;
     private defaultDone;
     private defaultType;
     private validator;
     private mininData;
-    onAfter(pathConfig: PathConfig, config: StartInterface, request: Request, response: Response): any;
+    onAfter(pathConfig: tenp.PathConfig, config: tenp.StartInterface, request: tenp.Request, response: tenp.Response): any;
 }
 export interface Validator {
     [prop: string]: {

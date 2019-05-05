@@ -1,14 +1,14 @@
-import { Plugin, StartInterface, RouterConfig, NewFunction, RouterInfo } from '../../d.ts/interface'
+import tenp, { NewFunction } from '../../interface'
 import { dbRouterInfo } from '../router'
 /**
  * Used to implement factory services
  */
 
-export default class InjectorPlugin implements Plugin {
+export default class InjectorPlugin implements tenp.Plugin {
 
 	private globalProvide: { [prop: string]: any } = {};
 
-	public onTenp(config: StartInterface): void {
+	public onTenp(config: tenp.StartInterface): void {
 		this.globalProvide = this.initProvide(config.provide || [])
 	}
 
@@ -24,7 +24,7 @@ export default class InjectorPlugin implements Plugin {
 	//Step by step search service
 	private searchServer(name: string,id: string): any{
 		let server = null;
-		const routerInfo: RouterInfo = dbRouterInfo[id];
+		const routerInfo: tenp.RouterInfo = dbRouterInfo[id];
 		let pluginMap = routerInfo.config.provide;
 		if(pluginMap[name]){
 			server = pluginMap[name];
@@ -36,7 +36,7 @@ export default class InjectorPlugin implements Plugin {
 		return server;
 	}
 
-	public onRouter($class: any, routerConfig: RouterConfig): void {
+	public onRouter($class: any, routerConfig: tenp.RouterConfig): void {
 		routerConfig.provide = this.initProvide(routerConfig.provide || []);
 		for(let key in $class){
 			if(key.substr(0,13) != 'tenp_provide_')  continue;

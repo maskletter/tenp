@@ -61,13 +61,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var chai_1 = require("chai");
 require("mocha");
 var __1 = require("../");
+var interface_1 = require("../interface");
 var tool_1 = require("./tool");
 var express = require("express");
 var http = require("http");
 var assert = require("assert");
 process.stdout.write(process.platform === 'win32' ? '\x1Bc' : '\x1B[2J\x1B[3J\x1B[H');
 var interceptor = function (req, res) {
-    // console.log('经过了hello路由')
+    // console.log('经过了hello路由' )
 };
 var SecondRouter = /** @class */ (function (_super) {
     __extends(SecondRouter, _super);
@@ -131,158 +132,154 @@ var HelloWorld = /** @class */ (function (_super) {
     ], HelloWorld);
     return HelloWorld;
 }(__1.RouterComponent));
-describe('初始化服务', function () {
-    it('创建tenp实例', function () { return __awaiter(_this, void 0, void 0, function () {
-        var $tenp;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, __1.Start({
-                        port: 3687,
-                    })];
-                case 1:
-                    $tenp = _a.sent();
-                    return [2 /*return*/];
-            }
-        });
-    }); });
-    it('创建tenp实例(注入外部express实例)', function () { return __awaiter(_this, void 0, void 0, function () {
-        var app, server, $tenp;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    app = express();
-                    server = http.createServer(app).listen(8080);
-                    return [4 /*yield*/, __1.Start({
-                            port: 3688,
-                            express: function (private_app) {
-                                assert(private_app == app);
-                            },
-                        }, app)];
-                case 1:
-                    $tenp = _a.sent();
-                    return [2 /*return*/];
-            }
-        });
-    }); });
-});
-describe('路由模块', function () {
-    var routerInfo = __1.dbRouterInfo[HelloWorld.prototype.$$id];
-    it("检查router", function () {
-        chai_1.expect(tool_1.objectToBoolean(Object.assign({}, routerInfo))).to.be.deep.equal({
-            id: true,
-            name: true,
-            config: true,
-            functoin: true,
-            path: true
-        });
-        chai_1.expect(tool_1.objectToBoolean(Object.assign({}, routerInfo.config))).to.be.deep.equal({
-            name: true,
-            url: true,
-            interceptor: true,
-            interceptorType: true,
-            router: true
-        });
+describe('初始化服务', function () { return __awaiter(_this, void 0, void 0, function () {
+    var _this = this;
+    return __generator(this, function (_a) {
+        it('创建tenp实例', function () { return __awaiter(_this, void 0, void 0, function () {
+            var $tenp;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, __1.Start({
+                            port: 3687,
+                        })];
+                    case 1:
+                        $tenp = _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        it('创建tenp实例(注入外部express实例)', function () { return __awaiter(_this, void 0, void 0, function () {
+            var app, server, $tenp;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        app = express();
+                        server = http.createServer(app).listen(8080);
+                        return [4 /*yield*/, __1.Start({
+                                port: 3688,
+                                express: function (private_app) {
+                                    assert(private_app == app);
+                                },
+                            }, app)];
+                    case 1:
+                        $tenp = _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        return [2 /*return*/];
     });
-    it('检查config', function () {
-        chai_1.expect(routerInfo.path.length).to.be.deep.equal(3);
-        chai_1.expect(routerInfo.path[1].config).to.be.deep.equal({
-            url: '/world',
-            type: 'get',
-            name: '测试路由2',
-            interceptorType: 'abandon',
-            validator: { phone: { type: 'phone' } },
-            validatorType: 'query'
-        });
-        assert(typeof routerInfo.path[0].callback === 'function');
-    });
-});
-describe('插件模块', function () {
-    it('拦截器', function (done) {
-        __1.Start({
-            port: 3691,
-            baseUrl: '/inter',
-            interceptor: [function global() {
-                    done();
-                }],
-            router: [HelloWorld],
-        }).then(function (result) {
-            http.get('http://localhost:3691/inter/hello/world3?phone=13654777775', function (res) {
-                // console.log(res)
+}); });
+describe('路由模块', function () { return __awaiter(_this, void 0, void 0, function () {
+    var routerInfo;
+    return __generator(this, function (_a) {
+        routerInfo = __1.dbRouterInfo[HelloWorld.prototype.$$id];
+        it("检查router", function () {
+            chai_1.expect(tool_1.objectToBoolean(Object.assign({}, routerInfo))).to.be.deep.equal({
+                id: true,
+                name: true,
+                config: true,
+                functoin: true,
+                path: true
+            });
+            chai_1.expect(tool_1.objectToBoolean(Object.assign({}, routerInfo.config))).to.be.deep.equal({
+                name: true,
+                url: true,
+                interceptor: true,
+                interceptorType: true,
+                router: true
             });
         });
-    });
-    it('数据验证器', function (done) {
-        var validation1 = {
-            phone: {
-                type: 'phone',
-                name: '手机号',
-                required: true,
-                message: {
-                    type: '手机类型不正确'
-                }
-            },
-            name: {
-                type: 'string',
-                required: false
-            },
-            done: function (err) {
-                done();
-            }
-        };
-        var validator = new (require('../dist/lib/plugin/validator.plugin').default);
-        validator.validator({ phone: '13*654777775' }, validation1);
-    });
-    it('注入器', function () {
-        var TestInjectable = /** @class */ (function () {
-            function TestInjectable() {
-                this.name = '测试注入器';
-            }
-            return TestInjectable;
-        }());
-        var TestRouter = /** @class */ (function (_super) {
-            __extends(TestRouter, _super);
-            function TestRouter() {
-                return _super !== null && _super.apply(this, arguments) || this;
-            }
-            TestRouter.prototype.onInit = function () {
-                chai_1.expect(this.test).to.be.an.instanceof(TestInjectable);
-            };
-            __decorate([
-                __1.Injector('test-injectable'),
-                __metadata("design:type", TestInjectable)
-            ], TestRouter.prototype, "test", void 0);
-            TestRouter = __decorate([
-                __1.Router({})
-            ], TestRouter);
-            return TestRouter;
-        }(__1.RouterComponent));
-        __1.Start({
-            port: 3689,
-            router: [TestRouter],
-            provide: [{ class: TestInjectable, name: 'test-injectable' }]
+        it('检查config', function () {
+            chai_1.expect(routerInfo.path.length).to.be.deep.equal(3);
+            chai_1.expect(routerInfo.path[1].config).to.be.deep.equal({
+                url: '/world',
+                type: 'get',
+                name: '测试路由2',
+                interceptorType: 'abandon',
+                validator: { phone: { type: 'phone' } },
+                validatorType: 'query'
+            });
+            assert(typeof routerInfo.path[0].callback === 'function');
         });
+        return [2 /*return*/];
     });
-});
+}); });
+describe('插件模块', function () { return __awaiter(_this, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        it('拦截器', function (done) {
+            __1.Start({
+                port: 3691,
+                baseUrl: '/inter',
+                interceptor: [function global() {
+                        done();
+                    }],
+                router: [HelloWorld],
+            }).then(function (result) {
+                http.get('http://localhost:3691/inter/hello/world3?phone=13654777775', function (res) {
+                    // console.log(res)
+                });
+            });
+        });
+        it('数据验证器', function (done) {
+            var validation1 = {
+                phone: {
+                    type: 'phone',
+                    name: '手机号',
+                    required: true,
+                    message: {
+                        type: '手机类型不正确'
+                    }
+                },
+                name: {
+                    type: 'string',
+                    required: false
+                },
+                done: function (err) {
+                    done();
+                }
+            };
+            var validator = new (require('../dist/lib/plugin/validator.plugin').default);
+            validator.validator({ phone: '13*654777775' }, validation1);
+        });
+        it('注入器', function () {
+            var TestInjectable = /** @class */ (function () {
+                function TestInjectable() {
+                    this.name = '测试注入器';
+                }
+                return TestInjectable;
+            }());
+            var TestRouter = /** @class */ (function (_super) {
+                __extends(TestRouter, _super);
+                function TestRouter() {
+                    return _super !== null && _super.apply(this, arguments) || this;
+                }
+                TestRouter.prototype.onInit = function () {
+                    chai_1.expect(this.test).to.be.an.instanceof(TestInjectable);
+                };
+                __decorate([
+                    __1.Injector('test-injectable'),
+                    __metadata("design:type", TestInjectable)
+                ], TestRouter.prototype, "test", void 0);
+                TestRouter = __decorate([
+                    __1.Router({})
+                ], TestRouter);
+                return TestRouter;
+            }(__1.RouterComponent));
+            __1.Start({
+                port: 3689,
+                router: [TestRouter],
+                provide: [{ class: TestInjectable, name: 'test-injectable' }]
+            });
+        });
+        return [2 /*return*/];
+    });
+}); });
 describe('接口请求', function () {
     var TestRouter = /** @class */ (function () {
         function TestRouter() {
         }
-        TestRouter.prototype.get1 = function (request, response) {
-            response.end('success');
-        };
-        TestRouter.prototype.post1 = function (request, response) {
-            response.end('success');
-        };
-        TestRouter.prototype.delete1 = function (request, response) {
-            response.end('success');
-        };
-        TestRouter.prototype.put1 = function (request, response) {
-            response.end('success');
-        };
-        TestRouter.prototype.head1 = function (request, response) {
-            response.end('success');
-        };
-        TestRouter.prototype.config1 = function (request, response) {
+        TestRouter.prototype.dawdget1 = function (request, response) {
             response.end('success');
         };
         __decorate([
@@ -290,37 +287,7 @@ describe('接口请求', function () {
             __metadata("design:type", Function),
             __metadata("design:paramtypes", [Object, Object]),
             __metadata("design:returntype", void 0)
-        ], TestRouter.prototype, "get1", null);
-        __decorate([
-            __1.Post('/test'),
-            __metadata("design:type", Function),
-            __metadata("design:paramtypes", [Object, Object]),
-            __metadata("design:returntype", void 0)
-        ], TestRouter.prototype, "post1", null);
-        __decorate([
-            __1.Delete('/test'),
-            __metadata("design:type", Function),
-            __metadata("design:paramtypes", [Object, Object]),
-            __metadata("design:returntype", void 0)
-        ], TestRouter.prototype, "delete1", null);
-        __decorate([
-            __1.Put('/test'),
-            __metadata("design:type", Function),
-            __metadata("design:paramtypes", [Object, Object]),
-            __metadata("design:returntype", void 0)
-        ], TestRouter.prototype, "put1", null);
-        __decorate([
-            __1.Head('/test'),
-            __metadata("design:type", Function),
-            __metadata("design:paramtypes", [Object, Object]),
-            __metadata("design:returntype", void 0)
-        ], TestRouter.prototype, "head1", null);
-        __decorate([
-            __1.Config({ url: '/config-test' }),
-            __metadata("design:type", Function),
-            __metadata("design:paramtypes", [Object, Object]),
-            __metadata("design:returntype", void 0)
-        ], TestRouter.prototype, "config1", null);
+        ], TestRouter.prototype, "dawdget1", null);
         TestRouter = __decorate([
             __1.Router()
         ], TestRouter);
@@ -330,30 +297,20 @@ describe('接口请求', function () {
         port: 3690,
         router: [TestRouter],
     }).then(function (result) {
-        it('get测试', function (done) {
-            done();
-            routerSim('get', '/test', done);
-        });
     });
-    // it('post测试',  (done: Function) => {
-    //   routerSim('post', '/test', done);
-    // })
-    // it('put测试',  (done: Function) => {
-    //   routerSim('put', '/test', done);
-    // })
-    // it('delete测试',  (done: Function) => {
-    //   routerSim('delete', '/test', done);
-    // })
-    // it('head测试',  (done: Function) => {
-    //   routerSim('head', '/test', done);
-    // })
-    // it('config测试',  (done: Function) => {
-    //   routerSim('head', '/config-test', done);
-    // })
+    it('get测试', function (done) {
+        routerSim('get', '/test', done);
+    });
 });
 function routerSim(method, url, done) {
-    console.log(method);
-    http[method]('http://localhost:3690' + url, function (res) {
-        // done();
+    return __awaiter(this, void 0, void 0, function () {
+        var req;
+        return __generator(this, function (_a) {
+            req = http.request({ method: method, port: 3690, path: url }, function (res) {
+                done();
+            });
+            req.end();
+            return [2 /*return*/];
+        });
     });
 }

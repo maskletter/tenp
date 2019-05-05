@@ -1,4 +1,4 @@
-import { StartInterface, RouterConfig, PathConfig, Request, Response } from '../d.ts/interface'
+import tenp from '../interface'
 import UrlPlugin from './plugin/url.plugin'
 import InterceptorPlugin from './plugin/interceptor.plugin'
 import InjectorPlugin from './plugin/injector.plugin'
@@ -8,7 +8,7 @@ import CommonPlugin from './plugin/common.plugin'
 import { dbRouterInfo } from './router'
 
 //Get the parent configuration
-export const GetParentConfig: (parentId: string) => StartInterface = (parentId: string): any => {
+export const GetParentConfig: (parentId: string) => tenp.StartInterface = (parentId: string): any => {
 
 	if(parentId && dbRouterInfo[parentId]){
 		return dbRouterInfo[parentId].config
@@ -20,7 +20,7 @@ export const GetParentConfig: (parentId: string) => StartInterface = (parentId: 
 
 
 //Initialize the tenp event(plugin)
-export const InitPluginTenpEvent: (config: StartInterface) => any = async (config: StartInterface): Promise<any> => {
+export const InitPluginTenpEvent: (config: tenp.StartInterface) => any = async (config: tenp.StartInterface): Promise<any> => {
 
 	let pluginMap = [CommonPlugin, UrlPlugin, InterceptorPlugin, InjectorPlugin, ReceivePlugin, ValidatorPlugin, ...(config.plugin || [])];
 	let pluginS: any[] = [];
@@ -34,7 +34,7 @@ export const InitPluginTenpEvent: (config: StartInterface) => any = async (confi
 }
 
 //Initialize routing events(plugin)
-export const InitPluginRouterEvent: (config: StartInterface, $class: any, routerConfig: RouterConfig, parentConfig: RouterConfig) => any = async (config: StartInterface, $class: any, routerConfig: RouterConfig, parentConfig: RouterConfig): Promise<any> => {
+export const InitPluginRouterEvent: (config: tenp.StartInterface, $class: any, routerConfig: tenp.RouterConfig, parentConfig: tenp.RouterConfig) => any = async (config: tenp.StartInterface, $class: any, routerConfig: tenp.RouterConfig, parentConfig: tenp.RouterConfig): Promise<any> => {
 	for(let plugin of config.plugin){
 		(plugin as any).onRouter && await (plugin as any).onRouter($class, routerConfig, parentConfig, config);
 	}
@@ -42,14 +42,14 @@ export const InitPluginRouterEvent: (config: StartInterface, $class: any, router
 
 
 //Initialize interface events(plugin)
-export const InitPluginInterfaceEvent: (pathConfig: PathConfig, config: StartInterface) => Promise<any> = async (pathConfig: PathConfig, config: StartInterface): Promise<any> => {
+export const InitPluginInterfaceEvent: (pathConfig: tenp.PathConfig, config: tenp.StartInterface) => Promise<any> = async (pathConfig: tenp.PathConfig, config: tenp.StartInterface): Promise<any> => {
 	for(let plugin of config.plugin){
 		(plugin as any).onInit && await (plugin as any).onInit(pathConfig, config);
 	}
 }
 
 //(plugin)
-export const AfterPluginInterfaceEvent: (pathConfig: PathConfig, config: StartInterface, request: Request, response: Response) => Promise<any> = async (pathConfig: PathConfig, config: StartInterface, request: Request, response: Response): Promise<any> => {
+export const AfterPluginInterfaceEvent: (pathConfig: tenp.PathConfig, config: tenp.StartInterface, request: tenp.Request, response: tenp.Response) => Promise<any> = async (pathConfig: tenp.PathConfig, config: tenp.StartInterface, request: tenp.Request, response: tenp.Response): Promise<any> => {
 	
 	
 	for(let plugin of config.plugin){

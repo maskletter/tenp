@@ -1,12 +1,12 @@
-import { Plugin, StartInterface, RouterConfig, PathConfig, Request, Response } from '../../d.ts/interface';
+import tenp from '../../interface';
 /**
  * Tenp interceptor implementation
  */
-export default class InterceptorPlugin implements Plugin {
+export default class InterceptorPlugin implements tenp.Plugin {
     private globalInterceptor;
     private routerInterceptor;
-    onTenp(config: StartInterface): void;
-    onRouter($class: any, routerConfig: RouterConfig, parentConfig: RouterConfig): void;
-    onInit(pathConfig: PathConfig): void;
-    onAfter(pathConfig: PathConfig, config: StartInterface, request: Request, response: Response): Promise<any>;
+    onTenp(config: tenp.StartInterface): void;
+    onRouter($class: any, routerConfig: tenp.RouterConfig, parentConfig: tenp.RouterConfig): void;
+    onInit(pathConfig: tenp.PathConfig): void;
+    onAfter(pathConfig: tenp.PathConfig, config: tenp.StartInterface, request: tenp.Request, response: tenp.Response): Promise<any>;
 }
